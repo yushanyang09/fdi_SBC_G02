@@ -1,6 +1,17 @@
 version = 1
 requires-python = ">=3.12"
 
+[manifest]
+members = [
+    "practica-2",
+    "sbc-g02-p2",
+]
+
+[[package]]
+name = "practica-2"
+version = "0.1.0"
+source = { virtual = "practica_2" }
+
 [[package]]
 name = "sbc-g02-p2"
 version = "0.1.0"
