@@ -1,5 +1,5 @@
-#Practica 2
-Integrantes:
--Carmen Fernández
--Yushan Yang
+# Práctica 2
 
+Integrantes:
+- Carmen Fernández
+- Yushan Yang
