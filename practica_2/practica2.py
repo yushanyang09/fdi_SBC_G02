@@ -16,13 +16,13 @@ class Regla:
 class BaseConocimiento:
     def __init__(self):
         self.reglas = [] # compuestas por el consecuente, antecedentes y grado de verdad
-        self.hechos = {} # agregamos un nuevo hecho a nuesta base de conocimiento
+        self.hechos = {} # almacenados en un diccionario ya que no se pueden repetir
         
 	# Método para agregar una regla
     def agregar_regla(self, regla):
         self.reglas.append(regla)
         
-    # Método para agregar un hecho
+    # Método para agregar un hecho (regla sin antecedentes)
     def agregar_hecho(self, hecho, grado_v=1.0):
         self.hechos[hecho] = grado_v
     
@@ -32,19 +32,55 @@ class BaseConocimiento:
             regla.imprimir()
         for hecho in self.hechos:
             print(hecho + " [" + str(self.hechos[hecho]) + "]")
+
+    # Devuelve el resultado de un AND en lógica difusa (valor mínimo)
+    def AND_(self, grados):
+        return min(grados)
     
+    # Devuelve el resultado de un OR en lógica difusa (valor máximo)
+    def OR_(self, grados):
+        return max(grados)
+
     # Realiza razonamiento hacia atrás
     def backward_chain(self, consulta):
+
+        # Si la consulta ya está en los hechos conocidos, no hay necesidad de seguir
+        if consulta in self.hechos:
+            return self.hechos[consulta]
+
+        grados_reglas = [] # almacena los grados de cada regla válida
+        
+        # Recorremos las reglas
         for regla in self.reglas:
+
+            # Si el consecuente coincide con la consulta
             if regla.cons == consulta:
+
                 ok = True
+                grado_v = regla.grado_verdad # grado de verdad de la regla
+                grados_antecedentes = [] # almacena los grados de los antecedentes válidos
+                
+                # Recorremos los antecedentes de la regla
                 for antecedente in regla.antecedentes:
-                    print(antecedente)
-                    if antecedente not in self.hechos:
+
+                    # Si un antecedente no está en los hechos, intentamos derivarlo recursivamente
+                    devuelto = self.backward_chain(antecedente)
+
+                    # Si no se cumple, lo indicamos con la variable ok
+                    if devuelto == -1:
                         ok = False
-                if ok == True:
-                    return "Si"
-        return "No"
+                    # Si el antecedente es un hecho, almacenamos su grado
+                    else:
+                        grados_antecedentes.append(devuelto)
+
+                # Si todos los antecedentes se cumplen, la consulta también se cumple
+                if ok:
+                    grados_reglas.append(self.AND_([grado_v, self.AND_(grados_antecedentes)]))
+
+        if len(grados_reglas) != 0:
+            return self.OR_(grados_reglas)
+        else:
+            return -1
                         
 def main():
     bc = BaseConocimiento()
@@ -88,7 +124,11 @@ def main():
             consulta = consulta.split()
             bc.agregar_hecho(consulta[1], float(consulta[2].strip("[]")))
         elif consulta.endswith("?"):
-            print(bc.backward_chain(consulta.strip("?")))
+            devuelto = bc.backward_chain(consulta.strip("?"))
+            if devuelto == -1:
+                print("No")
+            else:
+                print(f"Si, ({devuelto})")
             
         consulta = input()
         
