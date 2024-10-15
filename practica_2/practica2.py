@@ -20,6 +20,7 @@ class BaseConocimiento:
         self.reglas = [] # compuestas por el consecuente, antecedentes y grado de verdad
         self.hechos = {} # almacenados en un diccionario ya que no se pueden repetir
         self.seguimiento = []# almacenamos la derivacion coseguida 
+        
 	# Método para agregar una regla
     def agregar_regla(self, regla):
         self.reglas.append(regla)
@@ -88,15 +89,17 @@ class BaseConocimiento:
             return -1
     
     def imprimir_derivacion(self):
-        print("Derivacion:")
+        print("Derivación:")
         for x in self.seguimiento:
             regla = x["cons"]
-            print(f"Regla/s aplicada/s: {regla.antecedentes} -> {regla.cons}")
-            print(f"  Antecedentes aplicados y sus grados:")
+            print(f"Regla aplicada: {', '.join(regla.antecedentes)} -> {regla.cons}")
+            print("Antecedentes aplicados y sus grados:")
             for antecedente, grado in x["antecedentes_aplicados"]:
-                print(f"    {antecedente}: {grado}")
+                print(f"  {antecedente}: {grado}")
+            print()  
 
-    
+
+ 
                         
 def main():
     bc = BaseConocimiento()
