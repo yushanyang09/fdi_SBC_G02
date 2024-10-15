@@ -1,4 +1,6 @@
 from pathlib import Path
+import argparse
+# import toml
 
 archivo = Path("base_laboral.txt")
 texto = archivo.read_text()
@@ -17,7 +19,7 @@ class BaseConocimiento:
     def __init__(self):
         self.reglas = [] # compuestas por el consecuente, antecedentes y grado de verdad
         self.hechos = {} # almacenados en un diccionario ya que no se pueden repetir
-        
+        self.seguimiento = []# almacenamos la derivacion coseguida 
 	# Método para agregar una regla
     def agregar_regla(self, regla):
         self.reglas.append(regla)
@@ -59,6 +61,7 @@ class BaseConocimiento:
                 ok = True
                 grado_v = regla.grado_verdad # grado de verdad de la regla
                 grados_antecedentes = [] # almacena los grados de los antecedentes válidos
+                regla_aplicada = {"cons": regla, "antecedentes_aplicados": []} # para mostrar que reglas hemos aplicado
                 
                 # Recorremos los antecedentes de la regla
                 for antecedente in regla.antecedentes:
@@ -72,15 +75,28 @@ class BaseConocimiento:
                     # Si el antecedente es un hecho, almacenamos su grado
                     else:
                         grados_antecedentes.append(devuelto)
+                        regla_aplicada["antecedentes_aplicados"].append((antecedente, devuelto))  # Guardamos el antecedente aplicado
 
                 # Si todos los antecedentes se cumplen, la consulta también se cumple
                 if ok:
                     grados_reglas.append(self.AND_([grado_v, self.AND_(grados_antecedentes)]))
+                    self.seguimiento.append(regla_aplicada)
 
         if len(grados_reglas) != 0:
             return self.OR_(grados_reglas)
         else:
             return -1
+    
+    def imprimir_derivacion(self):
+        print("Derivacion:")
+        for x in self.seguimiento:
+            regla = x["cons"]
+            print(f"Regla/s aplicada/s: {regla.antecedentes} -> {regla.cons}")
+            print(f"  Antecedentes aplicados y sus grados:")
+            for antecedente, grado in x["antecedentes_aplicados"]:
+                print(f"    {antecedente}: {grado}")
+
+    
                         
 def main():
     bc = BaseConocimiento()
@@ -129,6 +145,7 @@ def main():
                 print("No")
             else:
                 print(f"Si, ({devuelto})")
+                bc.imprimir_derivacion()
             
         consulta = input()
         
