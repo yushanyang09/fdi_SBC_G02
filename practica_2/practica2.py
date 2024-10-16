@@ -19,7 +19,7 @@ class BaseConocimiento:
     def __init__(self):
         self.reglas = [] # compuestas por el consecuente, antecedentes y grado de verdad
         self.hechos = {} # almacenados en un diccionario ya que no se pueden repetir
-        self.seguimiento = []# almacenamos la derivacion coseguida 
+        self.seguimiento = [] # almacenamos la derivacion seguida en la consulta
         
 	# Método para agregar una regla
     def agregar_regla(self, regla):
@@ -96,11 +96,8 @@ class BaseConocimiento:
             print("Antecedentes aplicados y sus grados:")
             for antecedente, grado in x["antecedentes_aplicados"]:
                 print(f"  {antecedente}: {grado}")
-            print()  
-
-
- 
-                        
+            print()
+       
 def main():
     bc = BaseConocimiento()
 
@@ -143,6 +140,7 @@ def main():
             consulta = consulta.split()
             bc.agregar_hecho(consulta[1], float(consulta[2].strip("[]")))
         elif consulta.endswith("?"):
+            bc.seguimiento = []
             devuelto = bc.backward_chain(consulta.strip("?"))
             if devuelto == -1:
                 print("No")
