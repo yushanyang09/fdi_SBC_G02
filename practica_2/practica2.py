@@ -158,11 +158,39 @@ class BaseConocimiento:
             return self.OR_(grados_reglas)
         else:
             return -1
+
+def imprimir_ayuda():
+    """Imprime la ayuda al usuario definida como docstring en el main"""
+    ctx = click.get_current_context()
+    click.echo(ctx.get_help())
        
 @click.command()
 @click.argument("base", type=click.Path(exists=True, path_type=Path))
 
 def main(base: Path):
+    """Este sistema está basado en reglas y es capaz de realizar razonamiento
+    hacia atrás (backward chaining), incorporando lógica difusa
+    
+    Para ejecutar el programa en tu terminal introduce el siguiente comando:
+
+    uv run practica2.py <base_conocimiento>
+    
+    Argumentos:
+
+        base_conocimiento: nombre del fichero que contiene la base de conocimiento a utilizar
+    
+    Comandos:
+
+        <consulta>?: hace una consulta a la base de conocimiento
+
+        add <nombre_hecho> [<grado_v>]: añade a la base de conocimiento un hecho llamado nombre_hecho con grado_v (float) como grado de verdad
+
+        help: muestra la ayuda al usuario
+    
+        exit: termina la ejecución del programa
+        
+    """
+
     bc = BaseConocimiento()
 
     # Leemos el fichero que contiene la base de conocimiento
@@ -204,6 +232,8 @@ def main(base: Path):
     while (consulta != "exit"):
         if (consulta == "print"):
             bc.imprimir()
+        elif (consulta == "help"):
+            imprimir_ayuda()
         elif consulta.startswith("add"):
             consulta = consulta.split()
             bc.agregar_hecho(consulta[1], float(consulta[2].strip("[]")))
