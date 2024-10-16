@@ -1,9 +1,6 @@
 from pathlib import Path
-import argparse
-# import toml
-
-archivo = Path("base_laboral.txt")
-texto = archivo.read_text()
+import tomllib 
+import click
 
 class Regla:
     def __init__(self, cons, antecedentes, grado_v=1.0):
@@ -98,8 +95,14 @@ class BaseConocimiento:
                 print(f"  {antecedente}: {grado}")
             print()
        
-def main():
+@click.command()
+@click.argument("base", type=click.Path(exists=True, path_type=Path))
+def main(base: Path):
     bc = BaseConocimiento()
+    #Leemos el fichero que contiene la base de conocimiento
+    with base.open("r", encoding="utf-8") as f:  
+        texto = f.read()
+
 
     # Leemos el archivo que contiene la base de conocimiento        
     for line in texto.split("\n"):
