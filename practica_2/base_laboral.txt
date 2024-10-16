@@ -23,3 +23,17 @@ analisis :- matematicas
 programacion :- C
 programacion :- python [0.6]
 psicologia :- profesor [0.7]
+
+## Añadimos nuevas reglas de trabajos
+ing_datos :- analisis, programacion [0.85]
+inteligencia_artificial :- programacion, matematicas [0.9]
+profesor :- matemáticas, economía [0.6]
+hacker :- linux, programacion [0.5]
+
+## Añadimos nuevas reglas de habilidades
+python :- machine_learning [0.8]
+matematicas :- analisis [0.6]
+
+# Cadena 1: matematicas :- fisica, programacion [0.8] -> analisis :- matematicas -> ing_datos :- analisis, programacion [0.85]
+# Cadena 2: matematicas :- analisis [0.6] -> inteligencia_artificial :- programacion, matematicas [0.9]
+# Cadena 3: python :- machine_learning [0.8] -> programacion :- python [0.6] -> hacker :- linux, programacion [0.5]

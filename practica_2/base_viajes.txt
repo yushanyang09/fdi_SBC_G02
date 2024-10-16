@@ -1,0 +1,19 @@
+# Base de conocimiento que recomienda destinos de viaje basándose en diferentes factores
+
+# Destinos
+islas_canarias :- sol, relajante [0.7]
+asturias :- naturaleza, aventura [0.9]
+toledo :- cultura, presupuesto_bajo [0.5]
+pirineos :- aventura, lujo [0.4]
+burgos :- naturaleza, relajante, presupuesto_bajo [0.6]
+ibiza :- ocio, lujo [0.8]
+
+# Características
+sol :- clima_calido, playa [0.9]
+relajante :- spa, playa [0.8]
+naturaleza :- montaña, fauna [0.7]
+aventura :- senderismo, deportes_extremos [0.8]
+cultura :- museos, arquitectura, arte [0.9]
+presupuesto_bajo :- ofertas, hoteles_3_estrellas [0.6]
+lujo :- hoteles_5_estrellas, gastronomia [0.8]
+ocio :- fiestas, gastronomia [0.6]
