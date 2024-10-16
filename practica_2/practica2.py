@@ -165,7 +165,7 @@ def imprimir_ayuda():
     click.echo(ctx.get_help())
 
 def modificar_configuracion(toml: Path):
-    """Función para leer, modificar y guardar la configuración TOML."""
+    """Función para leer, modificar y guardar la configuración TOML"""
     # Lee la configuración inicial del archivo TOML
     with toml.open("rb") as f:
         data = tomllib.load(f)
@@ -176,11 +176,11 @@ def modificar_configuracion(toml: Path):
     if idioma:
         data["language"] = idioma
 
-    limite_inferior = input("Nuevo límite inferior para 'poco' (dejar vacío para no cambiar): ")
+    limite_inferior = input("Nuevo límite inferior. Por defecto 0.3 (dejar vacío para no cambiar): ")
     if limite_inferior:
         data["rango_respuesta"]["inferior"] = float(limite_inferior)
 
-    limite_superior = input("Nuevo límite superior para 'mucho' (dejar vacío para no cambiar): ")
+    limite_superior = input("Nuevo límite superior. Por defecto 0.7 (dejar vacío para no cambiar): ")
     if limite_superior:
         data["rango_respuesta"]["superior"] = float(limite_superior)
 
@@ -191,7 +191,7 @@ def modificar_configuracion(toml: Path):
     # Guarda la nueva configuración 
     with toml.open("w", encoding="utf-8") as f:
         f.write(f'language = "{data["language"]}"\n')
-        f.write(f'rango_respuesta = {{"inferior": {data["rango_respuesta"]["inferior"]}, "superior": {data["rango_respuesta"]["superior"]}}}\n')
+        f.write(f'rango_respuesta = {{"inferior"= {data["rango_respuesta"]["inferior"]}, "superior"= {data["rango_respuesta"]["superior"]}}}\n')
         f.write(f'logica_difusa = "{data["logica_difusa"]}"\n')
 
     return data
@@ -206,11 +206,13 @@ def main(base: Path, toml:Path):
     
     Para ejecutar el programa en tu terminal introduce el siguiente comando:
 
-    uv run practica2.py <base_conocimiento>
+    uv run practica2.py <base_conocimiento> <toml>
     
     Argumentos:
 
         base_conocimiento: nombre del fichero que contiene la base de conocimiento a utilizar
+        
+        toml: archivo de configuración con la extensión toml
     
     Comandos:
 
@@ -230,7 +232,6 @@ def main(base: Path, toml:Path):
 
     # Mostrar la configuración modificada
     print("Configuración final devuelta por la función:", data_modificado)
-    
 
     # Leemos el fichero que contiene la base de conocimiento
     with base.open("r", encoding="utf-8") as f:  
@@ -265,6 +266,9 @@ def main(base: Path, toml:Path):
             regla = Regla(cons, antecedentes)
             bc.agregar_regla(regla)
 
+    print("BIENVENIDO!")
+
+    print("Introduce un comando (help para ver la ayuda):")
     consulta = input()
     
     # Mientras la consulta no sea "exit", continúa la ejecución
@@ -283,11 +287,15 @@ def main(base: Path, toml:Path):
                 print("No")
             else:
                 if  devuelto >= data_modificado["rango_respuesta"]["superior"]:
-                    print(f"Si, mucho ({devuelto})")
-                else: 
-                    print(f"Si, poco ({devuelto})")
+                    p = "mucho"
+                elif devuelto <= data_modificado["rango_respuesta"]["inferior"]: 
+                    p = "poco"
+                else:
+                    p = "intermedio"
+                print(f"Si, {p} ({devuelto})")
                 bc.imprimir_derivacion()
-            
+        
+        print("Introduce un comando:")
         consulta = input()
         
 if __name__ == '__main__':
