@@ -3,46 +3,120 @@ import tomllib
 import click
 
 class Regla:
+    """Representa una regla de la base de conocimiento
+
+    Atributos:
+    cons (string): consecuente de la regla
+        antecedentes (list): antecedentes de la regla
+        grado_v (float): valor del grado de verdad
+    """
     def __init__(self, cons, antecedentes, grado_v=1.0):
+        """Inicializa una regla
+
+        Parámetros:
+        cons (string): consecuente de la regla
+        antecedentes (list): antecedentes de la regla
+        grado_v (float): valor del grado de verdad
+
+        """
         self.cons = cons
         self.antecedentes = antecedentes
         self.grado_verdad= grado_v
         
     def imprimir(self):
+        """Imprime una regla"""
         string_antecedentes = ", ".join(self.antecedentes)
         print(self.cons + " :- " + string_antecedentes + " [" + str(self.grado_verdad) + "]")
         
 class BaseConocimiento:
+    """Representa la base de conocimiento
+
+    Atributos:
+    reglas (list): lista de reglas de la base de conocimiento
+    hechos (dict): lista de hechos de la base de conocimiento y sus grados de verdad
+    seguimiento (list): reglas seguidas en la derivación de la consulta
+
+    """
     def __init__(self):
-        self.reglas = [] # compuestas por el consecuente, antecedentes y grado de verdad
-        self.hechos = {} # almacenados en un diccionario ya que no se pueden repetir
-        self.seguimiento = [] # almacenamos la derivacion seguida en la consulta
+        """Inicializa una base de conocimiento
+
+        Parámetros:
+        reglas (list): lista de reglas de la base de conocimiento
+        hechos (dict): lista de hechos de la base de conocimiento y sus grados de verdad
+        seguimiento (list): reglas seguidas en la derivación de la consulta
+
+        """
+        self.reglas = []
+        self.hechos = {}
+        self.seguimiento = []
         
-	# Método para agregar una regla
     def agregar_regla(self, regla):
+        """Añade una regla a la base de conocimiento
+
+        Parámetros:
+        regla (Regla): regla que se quiere añadir
+
+        """
         self.reglas.append(regla)
         
-    # Método para agregar un hecho (regla sin antecedentes)
     def agregar_hecho(self, hecho, grado_v=1.0):
+        """Añade un hecho a la base de conocimiento
+
+        Parámetros:
+        hecho (string): hecho que se quiere añadir
+        grado_v (float): grado de verdad del hecho
+
+        """
         self.hechos[hecho] = grado_v
     
-    # Imprime las reglas y los hechos de la base de conocimiento
     def imprimir(self):
+        """Imprime las reglas y los hechos de la base de conocimiento"""
         for regla in self.reglas:
             regla.imprimir()
         for hecho in self.hechos:
             print(hecho + " [" + str(self.hechos[hecho]) + "]")
 
-    # Devuelve el resultado de un AND en lógica difusa (valor mínimo)
+    def imprimir_derivacion(self):
+        """Imprime las reglas seguidas en la derivación de una consulta"""
+        print("Derivación:")
+        for x in self.seguimiento:
+            regla = x["cons"]
+            print(f"Regla aplicada: {', '.join(regla.antecedentes)} -> {regla.cons}")
+            print("Antecedentes aplicados y sus grados:")
+            for antecedente, grado in x["antecedentes_aplicados"]:
+                print(f"  {antecedente}: {grado}")
+            print()
+
     def AND_(self, grados):
+        """Devuelve el resultado de un AND en lógica difusa (valor mínimo)
+        
+        Parámetros:
+        grados (list): lista de los grados de los antecedentes
+        
+        """
         return min(grados)
     
-    # Devuelve el resultado de un OR en lógica difusa (valor máximo)
     def OR_(self, grados):
+        """Devuelve el resultado de un OR en lógica difusa (valor máximo)
+        
+        Parámetros:
+        grados (list): lista de los grados de las reglas
+        
+        """
         return max(grados)
 
     # Realiza razonamiento hacia atrás
     def backward_chain(self, consulta):
+        """Realiza razonamiento hacia atrás con lógica difusa
+
+        Parámetros:
+        consulta (string): consulta introducida por el usuario
+
+        Devuelve:
+        -1: si no se cumple la consulta
+        float: grado de verdad de la consulta
+
+        """
 
         # Si la consulta ya está en los hechos conocidos, no hay necesidad de seguir
         if consulta in self.hechos:
@@ -84,25 +158,16 @@ class BaseConocimiento:
             return self.OR_(grados_reglas)
         else:
             return -1
-    
-    def imprimir_derivacion(self):
-        print("Derivación:")
-        for x in self.seguimiento:
-            regla = x["cons"]
-            print(f"Regla aplicada: {', '.join(regla.antecedentes)} -> {regla.cons}")
-            print("Antecedentes aplicados y sus grados:")
-            for antecedente, grado in x["antecedentes_aplicados"]:
-                print(f"  {antecedente}: {grado}")
-            print()
        
 @click.command()
 @click.argument("base", type=click.Path(exists=True, path_type=Path))
+
 def main(base: Path):
     bc = BaseConocimiento()
-    #Leemos el fichero que contiene la base de conocimiento
+
+    # Leemos el fichero que contiene la base de conocimiento
     with base.open("r", encoding="utf-8") as f:  
         texto = f.read()
-
 
     # Leemos el archivo que contiene la base de conocimiento        
     for line in texto.split("\n"):
