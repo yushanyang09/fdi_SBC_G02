@@ -1,6 +1,7 @@
 from pathlib import Path
-import tomllib 
+import tomllib
 import click
+
 
 class Regla:
     """Representa una regla de la base de conocimiento
@@ -10,6 +11,7 @@ class Regla:
         antecedentes (list): antecedentes de la regla
         grado_v (float): valor del grado de verdad
     """
+
     def __init__(self, cons, antecedentes, grado_v=1.0):
         """Inicializa una regla
 
@@ -21,13 +23,21 @@ class Regla:
         """
         self.cons = cons
         self.antecedentes = antecedentes
-        self.grado_verdad= grado_v
-        
+        self.grado_verdad = grado_v
+
     def imprimir(self):
         """Imprime una regla"""
         string_antecedentes = ", ".join(self.antecedentes)
-        print(self.cons + " :- " + string_antecedentes + " [" + str(self.grado_verdad) + "]")
-        
+        print(
+            self.cons
+            + " :- "
+            + string_antecedentes
+            + " ["
+            + str(self.grado_verdad)
+            + "]"
+        )
+
+
 class BaseConocimiento:
     """Representa la base de conocimiento
 
@@ -37,6 +47,7 @@ class BaseConocimiento:
     seguimiento (list): reglas seguidas en la derivación de la consulta
 
     """
+
     def __init__(self):
         """Inicializa una base de conocimiento
 
@@ -49,7 +60,7 @@ class BaseConocimiento:
         self.reglas = []
         self.hechos = {}
         self.seguimiento = []
-        
+
     def agregar_regla(self, regla):
         """Añade una regla a la base de conocimiento
 
@@ -58,7 +69,7 @@ class BaseConocimiento:
 
         """
         self.reglas.append(regla)
-        
+
     def agregar_hecho(self, hecho, grado_v=1.0):
         """Añade un hecho a la base de conocimiento
 
@@ -68,7 +79,7 @@ class BaseConocimiento:
 
         """
         self.hechos[hecho] = grado_v
-    
+
     def imprimir(self):
         """Imprime las reglas y los hechos de la base de conocimiento"""
         for regla in self.reglas:
@@ -89,19 +100,19 @@ class BaseConocimiento:
 
     def AND_(self, grados):
         """Devuelve el resultado de un AND en lógica difusa (valor mínimo)
-        
+
         Parámetros:
         grados (list): lista de los grados de los antecedentes
-        
+
         """
         return min(grados)
-    
+
     def OR_(self, grados):
         """Devuelve el resultado de un OR en lógica difusa (valor máximo)
-        
+
         Parámetros:
         grados (list): lista de los grados de las reglas
-        
+
         """
         return max(grados)
 
@@ -122,8 +133,8 @@ class BaseConocimiento:
         if consulta in self.hechos:
             return self.hechos[consulta]
 
-        grados_reglas = [] # almacena los grados de cada regla válida
-        
+        grados_reglas = []  # almacena los grados de cada regla válida
+
         # Recorremos las reglas
         for regla in self.reglas:
 
@@ -131,10 +142,15 @@ class BaseConocimiento:
             if regla.cons == consulta:
 
                 ok = True
-                grado_v = regla.grado_verdad # grado de verdad de la regla
-                grados_antecedentes = [] # almacena los grados de los antecedentes válidos
-                regla_aplicada = {"cons": regla, "antecedentes_aplicados": []} # para mostrar que reglas hemos aplicado
-                
+                grado_v = regla.grado_verdad  # grado de verdad de la regla
+                grados_antecedentes = (
+                    []
+                )  # almacena los grados de los antecedentes válidos
+                regla_aplicada = {
+                    "cons": regla,
+                    "antecedentes_aplicados": [],
+                }  # para mostrar que reglas hemos aplicado
+
                 # Recorremos los antecedentes de la regla
                 for antecedente in regla.antecedentes:
 
@@ -147,11 +163,15 @@ class BaseConocimiento:
                     # Si el antecedente es un hecho, almacenamos su grado
                     else:
                         grados_antecedentes.append(devuelto)
-                        regla_aplicada["antecedentes_aplicados"].append((antecedente, devuelto))  # Guardamos el antecedente aplicado
+                        regla_aplicada["antecedentes_aplicados"].append(
+                            (antecedente, devuelto)
+                        )  # Guardamos el antecedente aplicado
 
                 # Si todos los antecedentes se cumplen, la consulta también se cumple
                 if ok:
-                    grados_reglas.append(self.AND_([grado_v, self.AND_(grados_antecedentes)]))
+                    grados_reglas.append(
+                        self.AND_([grado_v, self.AND_(grados_antecedentes)])
+                    )
                     self.seguimiento.append(regla_aplicada)
 
         if len(grados_reglas) != 0:
@@ -159,17 +179,19 @@ class BaseConocimiento:
         else:
             return -1
 
+
 def imprimir_ayuda():
     """Imprime la ayuda al usuario definida como docstring en el main"""
     ctx = click.get_current_context()
     click.echo(ctx.get_help())
 
+
 def modificar_configuracion(toml: Path):
     """Función para leer, modificar y guardar la configuración TOML
-    
+
     IMPORTANTE: el idioma y la lógica difusa no se modifican, solo lo hemos puesto para
     que se vea que el archivo config.toml se modifica con éxito
-    
+
     """
     # Lee la configuración inicial del archivo TOML
     with toml.open("rb") as f:
@@ -181,11 +203,15 @@ def modificar_configuracion(toml: Path):
     if idioma:
         data["language"] = idioma
 
-    limite_inferior = input("Nuevo límite inferior. Por defecto 0.3 (dejar vacío para no cambiar): ")
+    limite_inferior = input(
+        "Nuevo límite inferior. Por defecto 0.3 (dejar vacío para no cambiar): "
+    )
     if limite_inferior:
         data["rango_respuesta"]["inferior"] = float(limite_inferior)
 
-    limite_superior = input("Nuevo límite superior. Por defecto 0.7 (dejar vacío para no cambiar): ")
+    limite_superior = input(
+        "Nuevo límite superior. Por defecto 0.7 (dejar vacío para no cambiar): "
+    )
     if limite_superior:
         data["rango_respuesta"]["superior"] = float(limite_superior)
 
@@ -193,32 +219,34 @@ def modificar_configuracion(toml: Path):
     if logica_difusa:
         data["logica_difusa"] = logica_difusa
 
-    # Guarda la nueva configuración 
+    # Guarda la nueva configuración
     with toml.open("w", encoding="utf-8") as f:
         f.write(f'language = "{data["language"]}"\n')
-        f.write(f'rango_respuesta = {{"inferior"= {data["rango_respuesta"]["inferior"]}, "superior"= {data["rango_respuesta"]["superior"]}}}\n')
+        f.write(
+            f'rango_respuesta = {{"inferior"= {data["rango_respuesta"]["inferior"]}, "superior"= {data["rango_respuesta"]["superior"]}}}\n'
+        )
         f.write(f'logica_difusa = "{data["logica_difusa"]}"\n')
 
     return data
-       
+
+
 @click.command()
 @click.argument("base", type=click.Path(exists=True, path_type=Path))
 @click.argument("toml", type=click.Path(exists=True, path_type=Path))
-
-def main(base: Path, toml:Path):
+def main(base: Path, toml: Path):
     """Este sistema está basado en reglas y es capaz de realizar razonamiento
     hacia atrás (backward chaining), incorporando lógica difusa
-    
+
     Para ejecutar el programa en tu terminal introduce el siguiente comando:
 
     uv run practica2.py <base_conocimiento> <toml>
-    
+
     Argumentos:
 
         base_conocimiento: nombre del fichero que contiene la base de conocimiento a utilizar
-        
+
         toml: archivo de configuración con la extensión toml
-    
+
     Comandos:
 
         <consulta>?: hace una consulta a la base de conocimiento
@@ -226,9 +254,9 @@ def main(base: Path, toml:Path):
         add <nombre_hecho> [<grado_verdad>]: añade a la base de conocimiento un hecho llamado nombre_hecho con grado_v (float) como grado de verdad
 
         help: muestra la ayuda al usuario
-    
+
         exit: termina la ejecución del programa
-        
+
     """
 
     bc = BaseConocimiento()
@@ -239,10 +267,10 @@ def main(base: Path, toml:Path):
     print("Configuración final devuelta por la función:", data_modificado)
 
     # Leemos el fichero que contiene la base de conocimiento
-    with base.open("r", encoding="utf-8") as f:  
+    with base.open("r", encoding="utf-8") as f:
         texto = f.read()
 
-    # Leemos el archivo que contiene la base de conocimiento        
+    # Leemos el archivo que contiene la base de conocimiento
     for line in texto.split("\n"):
 
         if line.startswith("#") or not line:
@@ -250,7 +278,7 @@ def main(base: Path, toml:Path):
 
         # Separamos el consecuente
         cons, resto = line.split(":-")
-        cons = cons.strip() # elimina los espacios en blanco
+        cons = cons.strip()  # elimina los espacios en blanco
 
         # Buscamos si hay un grado de verdad entre corchetes
         if "[" in resto and "]" in resto:
@@ -275,12 +303,12 @@ def main(base: Path, toml:Path):
 
     print("Introduce un comando (help para ver la ayuda):")
     consulta = input()
-    
+
     # Mientras la consulta no sea "exit", continúa la ejecución
-    while (consulta != "exit"):
-        if (consulta == "print"):
+    while consulta != "exit":
+        if consulta == "print":
             bc.imprimir()
-        elif (consulta == "help"):
+        elif consulta == "help":
             imprimir_ayuda()
         elif consulta.startswith("add"):
             try:
@@ -297,16 +325,18 @@ def main(base: Path, toml:Path):
 
                 bc.agregar_hecho(hecho, grado_verdad)
             except (IndexError, ValueError):
-                print("Formato incorrecto \U0001F620. Usa 'add <hecho> [<grado_verdad>]'")
+                print(
+                    "Formato incorrecto \U0001F620. Usa 'add <hecho> [<grado_verdad>]'"
+                )
         elif consulta.endswith("?"):
             bc.seguimiento = []
             devuelto = bc.backward_chain(consulta.strip("?"))
             if devuelto == -1:
                 print("No")
             else:
-                if  devuelto >= data_modificado["rango_respuesta"]["superior"]:
+                if devuelto >= data_modificado["rango_respuesta"]["superior"]:
                     p = "mucho"
-                elif devuelto <= data_modificado["rango_respuesta"]["inferior"]: 
+                elif devuelto <= data_modificado["rango_respuesta"]["inferior"]:
                     p = "poco"
                 else:
                     p = "intermedio"
@@ -314,9 +344,10 @@ def main(base: Path, toml:Path):
                 bc.imprimir_derivacion()
         else:
             print("Comando no válido \U0001F622")
-        
+
         print("Introduce un comando:")
         consulta = input()
-        
-if __name__ == '__main__':
+
+
+if __name__ == "__main__":
     main()
