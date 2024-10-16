@@ -218,7 +218,7 @@ def main(base: Path, toml:Path):
 
         <consulta>?: hace una consulta a la base de conocimiento
 
-        add <nombre_hecho> [<grado_v>]: añade a la base de conocimiento un hecho llamado nombre_hecho con grado_v (float) como grado de verdad
+        add <nombre_hecho> [<grado_verdad>]: añade a la base de conocimiento un hecho llamado nombre_hecho con grado_v (float) como grado de verdad
 
         help: muestra la ayuda al usuario
     
@@ -278,8 +278,21 @@ def main(base: Path, toml:Path):
         elif (consulta == "help"):
             imprimir_ayuda()
         elif consulta.startswith("add"):
-            consulta = consulta.split()
-            bc.agregar_hecho(consulta[1], float(consulta[2].strip("[]")))
+            try:
+                consulta = consulta.split()
+                hecho = consulta[1]
+
+                # Verificamos si se ha proporcionado un grado de verdad
+                if len(consulta) < 3:
+                    # Si no hay grado de verdad, asumimos el valor por defecto (1.0)
+                    grado_verdad = 1.0
+                    print(f"Grado de verdad no especificado, se asume {grado_verdad}")
+                else:
+                    grado_verdad = float(consulta[2].strip("[]"))
+
+                bc.agregar_hecho(hecho, grado_verdad)
+            except (IndexError, ValueError):
+                print("Formato incorrecto. Usa 'add <hecho> [<grado_verdad>]'")
         elif consulta.endswith("?"):
             bc.seguimiento = []
             devuelto = bc.backward_chain(consulta.strip("?"))
@@ -294,6 +307,8 @@ def main(base: Path, toml:Path):
                     p = "intermedio"
                 print(f"Si, {p} ({devuelto})")
                 bc.imprimir_derivacion()
+        else:
+            print("Comando no válido")
         
         print("Introduce un comando:")
         consulta = input()
