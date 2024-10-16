@@ -1,3 +1,3 @@
-idioma = "es"
-rango_respuesta = "mucho"
+language = "engl"
+rango_respuesta = {"inferior": 0.0, "superior": 0.7}
 logica_difusa = "min_max"

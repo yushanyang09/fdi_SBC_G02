@@ -163,11 +163,44 @@ def imprimir_ayuda():
     """Imprime la ayuda al usuario definida como docstring en el main"""
     ctx = click.get_current_context()
     click.echo(ctx.get_help())
+
+def modificar_configuracion(toml: Path):
+    """Función para leer, modificar y guardar la configuración TOML."""
+    # Lee la configuración inicial del archivo TOML
+    with toml.open("rb") as f:
+        data = tomllib.load(f)
+        print("Configuración inicial:", data)
+
+    # Solicita al usuario que modifique los valores
+    idioma = input("Nuevo idioma (dejar vacío para no cambiar): ")
+    if idioma:
+        data["language"] = idioma
+
+    limite_inferior = input("Nuevo límite inferior para 'poco' (dejar vacío para no cambiar): ")
+    if limite_inferior:
+        data["rango_respuesta"]["inferior"] = float(limite_inferior)
+
+    limite_superior = input("Nuevo límite superior para 'mucho' (dejar vacío para no cambiar): ")
+    if limite_superior:
+        data["rango_respuesta"]["superior"] = float(limite_superior)
+
+    logica_difusa = input("Nueva lógica difusa (dejar vacío para no cambiar): ")
+    if logica_difusa:
+        data["logica_difusa"] = logica_difusa
+
+    # Guarda la nueva configuración 
+    with toml.open("w", encoding="utf-8") as f:
+        f.write(f'language = "{data["language"]}"\n')
+        f.write(f'rango_respuesta = {{"inferior": {data["rango_respuesta"]["inferior"]}, "superior": {data["rango_respuesta"]["superior"]}}}\n')
+        f.write(f'logica_difusa = "{data["logica_difusa"]}"\n')
+
+    return data
        
 @click.command()
 @click.argument("base", type=click.Path(exists=True, path_type=Path))
+@click.argument("toml", type=click.Path(exists=True, path_type=Path))
 
-def main(base: Path):
+def main(base: Path, toml:Path):
     """Este sistema está basado en reglas y es capaz de realizar razonamiento
     hacia atrás (backward chaining), incorporando lógica difusa
     
@@ -192,6 +225,12 @@ def main(base: Path):
     """
 
     bc = BaseConocimiento()
+
+    data_modificado = modificar_configuracion(toml)
+
+    # Mostrar la configuración modificada
+    print("Configuración final devuelta por la función:", data_modificado)
+    
 
     # Leemos el fichero que contiene la base de conocimiento
     with base.open("r", encoding="utf-8") as f:  
@@ -243,7 +282,10 @@ def main(base: Path):
             if devuelto == -1:
                 print("No")
             else:
-                print(f"Si, ({devuelto})")
+                if  devuelto >= data_modificado["rango_respuesta"]["superior"]:
+                    print(f"Si, mucho ({devuelto})")
+                else: 
+                    print(f"Si, poco ({devuelto})")
                 bc.imprimir_derivacion()
             
         consulta = input()
