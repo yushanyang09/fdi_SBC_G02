@@ -165,7 +165,12 @@ def imprimir_ayuda():
     click.echo(ctx.get_help())
 
 def modificar_configuracion(toml: Path):
-    """Función para leer, modificar y guardar la configuración TOML"""
+    """Función para leer, modificar y guardar la configuración TOML
+    
+    IMPORTANTE: el idioma y la lógica difusa no se modifican, solo lo hemos puesto para
+    que se vea que el archivo config.toml se modifica con éxito
+    
+    """
     # Lee la configuración inicial del archivo TOML
     with toml.open("rb") as f:
         data = tomllib.load(f)
@@ -266,7 +271,7 @@ def main(base: Path, toml:Path):
             regla = Regla(cons, antecedentes)
             bc.agregar_regla(regla)
 
-    print("BIENVENIDO!")
+    print("BIENVENIDO! \U0001F600")
 
     print("Introduce un comando (help para ver la ayuda):")
     consulta = input()
@@ -292,7 +297,7 @@ def main(base: Path, toml:Path):
 
                 bc.agregar_hecho(hecho, grado_verdad)
             except (IndexError, ValueError):
-                print("Formato incorrecto. Usa 'add <hecho> [<grado_verdad>]'")
+                print("Formato incorrecto \U0001F620. Usa 'add <hecho> [<grado_verdad>]'")
         elif consulta.endswith("?"):
             bc.seguimiento = []
             devuelto = bc.backward_chain(consulta.strip("?"))
@@ -308,7 +313,7 @@ def main(base: Path, toml:Path):
                 print(f"Si, {p} ({devuelto})")
                 bc.imprimir_derivacion()
         else:
-            print("Comando no válido")
+            print("Comando no válido \U0001F622")
         
         print("Introduce un comando:")
         consulta = input()
