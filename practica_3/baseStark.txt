@@ -28,7 +28,7 @@ q2:arya_stark t2:pertenece q2:casa_stark ;
         t2:hermano q2:robb_stark ;
         t2:hermano q2:sansa_stark ;
         t2:hermano q2:bran_stark ;
-        t2:madre q2:rickon_stark ; 
+        t2:hermano q2:rickon_stark ; 
 
 q2:bran_stark t2:pertenece q2:casa_stark ;
         t2:hermano q2:robb_stark ;
