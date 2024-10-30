@@ -10,5 +10,5 @@ dependencies = [
 ]
 
 [tool.uv.workspace]
-members = ["practica_2"]
+members = ["practica_2", "practica_3"]
 

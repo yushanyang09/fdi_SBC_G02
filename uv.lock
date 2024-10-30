@@ -4,6 +4,7 @@ requires-python = ">=3.12"
 [manifest]
 members = [
     "practica-2",
+    "practica-3",
     "sbc-g02-p2",
 ]
 
@@ -92,6 +93,11 @@ wheels = [
 name = "practica-2"
 version = "0.1.0"
 source = { virtual = "practica_2" }
+
+[[package]]
+name = "practica-3"
+version = "0.1.0"
+source = { virtual = "practica_3" }
 
 [[package]]
 name = "sbc-g02-p2"
