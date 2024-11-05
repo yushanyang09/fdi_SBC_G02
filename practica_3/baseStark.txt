@@ -4,6 +4,7 @@ q2:eddard_stark t2:pertenece q2:casa_stark ;
 	t2:padre q2:arya_stark ;
 	t2:padre q2:bran_stark ;
 	t2:padre q2:rickon_stark ;
+        t2:casado_con q2:catelyn_stark .
 
 q2:catelyn_stark t2:pertenece q2:casa_stark ;
         t2:madre q2:robb_stark ;
@@ -11,8 +12,9 @@ q2:catelyn_stark t2:pertenece q2:casa_stark ;
         t2:madre q2:arya_stark ;
         t2:madre q2:bran_stark ;
         t2:madre q2:rickon_stark ;
+        t2:casado_con q2:eddard_stark .
 
-q2:rob_stark t2:pertenece q2:casa_stark ;
+q2:robb_stark t2:pertenece q2:casa_stark ;
         t2:hermano q2:sansa_stark ;
         t2:hermano q2:arya_stark ;
         t2:hermano q2:bran_stark ;

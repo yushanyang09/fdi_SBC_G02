@@ -10,14 +10,9 @@ import base_conocimiento
 
 def main(base: Path):
 
-    # Leemos el fichero que contiene la base de conocimiento
-    with base.open("r", encoding="utf-8") as f:
-        texto = f.read()
+    bc = base_conocimiento.leer_base_conocimiento(base)
 
-    # Leemos el archivo que contiene la base de conocimiento
-    for line in texto.split("\n"):
+    print(bc)
 
-        if line.startswith("#") or not line:
-            continue
-
-        
+if __name__ == "__main__":
+    main()
