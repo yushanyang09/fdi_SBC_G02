@@ -3,6 +3,7 @@ from pathlib import Path
 import click
 # Importamos módulos
 import base_conocimiento
+import motor_consultas
 
 @click.command()
 @click.argument("base", type=click.Path(exists=True, path_type=Path))
@@ -11,11 +12,17 @@ def main(base: Path):
 
     bc = base_conocimiento.leer_base_conocimiento(base)
 
-    print(bc)
-    print("Introduzca la consulta")
-    consulta = "select ?persona where{ ?persona t2:casado_con q2:eddard_stark}"
-    print(consulta)
-    base_conocimiento.leer_consulta(consulta)
+    print("BIENVENIDO! \U0001F600")
+    print("Introduce un comando:")
+    consulta = input()
+
+    # Mientras la consulta no sea "exit", continúa la ejecución
+    while consulta != "exit":
+        if consulta.startswith("select"):
+            motor_consultas.procesar_consulta(bc, consulta)
+        
+        print("Introduce un comando:")
+        consulta = input()
 
 if __name__ == "__main__":
     main()

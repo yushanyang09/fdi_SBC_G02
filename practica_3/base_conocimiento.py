@@ -1,37 +1,44 @@
 
 def leer_base_conocimiento(base):
     """Lee el fichero de la base de conocimiento y devuelve
-    un diccionario con toda la información que contiene.
+    una lista de tuplas con toda la información que contiene.
     
     Parámetros:
-    base (Path): ruta al fichero de la base de conocimiento"""
+    base (Path): ruta al fichero de la base de conocimiento
+    """
 
-    # Diccionario que contendrá la base de conocimiento
-    base_list=[]
+    # Lista que contendrá la base de conocimiento
+    base_list = []
 
     # Leemos el fichero que contiene la base de conocimiento
     with base.open("r", encoding="utf-8") as f:
         texto = f.read()
 
-    # Leemos el archivo que contiene la base de conocimiento
-    for line in texto.split("\n"):
+    # Filtramos las líneas que no son comentarios ni líneas vacías
+    lineas = [linea for linea in texto.split('\n') if not linea.startswith('#') and linea.strip()]
 
-        # Si es comentario o vacía
-        if line.startswith("#") or not line:
-            continue
-        
-        # Separamos los elementos de la línea
-        line_items = line.split()
-        if len(line_items) == 4:
-            sujeto, predicado, objeto, fin = line_items
-            # Si el sujeto no está en la base lo añadimos
-            sujeto_auxiliar=sujeto
-            afirmacion=(sujeto, predicado, objeto)
-            anyadir_afirmacion(base_list, afirmacion)
-        if len(line_items) == 3:
-            predicado, objeto, fin = line_items
-            afirmacion=(sujeto_auxiliar, predicado, objeto)
-            anyadir_afirmacion(base_list, afirmacion)
+    # Juntamos las líneas filtradas
+    texto_filtrado = ' '.join(lineas)
+
+    # Dividimos el texto en secciones usando '.' como separador
+    # Cada sección corresponde a un sujeto
+    secciones = [seccion.strip() for seccion in texto_filtrado.split('.') if seccion.strip()]
+
+    # Para cada sección
+    for seccion in secciones:
+
+        # Dividimos la sección en afirmaciones usando ';' como separador
+        afirmaciones = [afirmacion.strip() for afirmacion in seccion.split(';') if afirmacion.strip()]
+
+        if afirmaciones:
+            # Extraemos el sujeto de la primera afirmación
+            sujeto, predicado, objeto = afirmaciones[0].split()
+            anyadir_afirmacion(base_list, (sujeto, predicado, objeto))
+
+            # El resto de las afirmaciones tienen el mismo sujeto
+            for afirmacion_parcial in afirmaciones[1:]:
+                predicado, objeto = afirmacion_parcial.split()
+                anyadir_afirmacion(base_list, (sujeto, predicado, objeto))
     
     return base_list
 
@@ -39,17 +46,13 @@ def anyadir_afirmacion(base_list, afirmacion):
     """Añade una afirmación a la base de conocimiento.
     
     Parámetros:
-    base_dict (dict): lista de la base de conocimiento
-    sujeto (string): entidad que hace de sujeto de la afirmación
-    predicado (string): relación de la afirmación
-    objeto (string): entidad o atributo
+    base_list (lista): lista de la base de conocimiento
+    afirmacion (tupla): contiene 3 elementos:
+        - sujeto (string): entidad que hace de sujeto de la afirmación
+        - predicado (string): relación de la afirmación
+        - objeto (string): entidad o atributo
     """
+    
     if afirmacion not in base_list:
         base_list.append(afirmacion)
     return base_list
-def leer_consulta(consulta):
-    #busca la parte entre 'select' y 'where'
-    parte_select = consulta.split("select")[1].split("where")[0].strip()
-    variables_a_buscar = [var for var in parte_select.replace(",", "").split() if var.startswith("?")]
-    #usar el split
-    print(variables_a_buscar)
