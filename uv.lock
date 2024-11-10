@@ -98,6 +98,12 @@ source = { virtual = "practica_2" }
 name = "practica-3"
 version = "0.1.0"
 source = { virtual = "practica_3" }
+dependencies = [
+    { name = "click" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "click", specifier = ">=8.1.7" }]
 
 [[package]]
 name = "sbc-g02-p2"

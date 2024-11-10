@@ -1,3 +1,4 @@
+
 def leer_base_conocimiento(base):
     """Lee el fichero de la base de conocimiento y devuelve
     un diccionario con toda la información que contiene.
@@ -46,3 +47,9 @@ def anyadir_afirmacion(base_list, afirmacion):
     if afirmacion not in base_list:
         base_list.append(afirmacion)
     return base_list
+def leer_consulta(consulta):
+    #busca la parte entre 'select' y 'where'
+    parte_select = consulta.split("select")[1].split("where")[0].strip()
+    variables_a_buscar = [var for var in parte_select.replace(",", "").split() if var.startswith("?")]
+    #usar el split
+    print(variables_a_buscar)
