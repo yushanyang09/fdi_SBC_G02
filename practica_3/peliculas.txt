@@ -1,0 +1,51 @@
+q2:intocable wdt:P2047 '112' ;
+        t2:genero q2:Drama;
+        t2:genero q2:Comedia ;  
+        t2:director q2:eric_toledano ;
+        t2:director q2:olivier_nakache ;
+        t2:reparto q2:francois_cluzet ;
+        t2:reparto q2:omar_sy ;
+        t2:reparto q2:anne_le_ny .
+
+q2:el_senor_de_los_anillos_las_dos_torres wdt:P2047 '179' ;
+        t2:genero q2:Aventura;
+        t2:genero q2:Fantasia ;
+        t2:director q2:peter_jackson ;
+        t2:reparto q2:elijah_wood ;
+        t2:reparto q2:sean_astin ;
+        t2:reparto q2:viggo_mortensen .
+
+q2:el_padrino wdt:P2047 '175' ;
+        t2:genero q2:Crimen;
+        t2:genero q2:Drama ;
+        t2:director q2:francis_ford_coppola ;
+        t2:reparto q2:marlon_brando ;
+        t2:reparto q2:al_pacino ;
+        t2:reparto q2:james_caan .
+
+q2:el_rey_leon wdt:P2047 '89' ;
+        t2:genero q2:Aventura;
+        t2:genero q2:Animación;
+        t2:genero q2:Familia ;
+        t2:director q2:roger_allers ;
+        t2:director q2:rob_minkoff ;
+        t2:reparto q2:matthew_broderick ;
+        t2:reparto q2:jonathan_taylor ;
+        t2:reparto q2:james_earl_jones .
+
+q2:la_princesa_y_el_sapo wdt:P2047 '97' ;
+        t2:genero q2:Aventura;
+        t2:genero q2:Animación;
+        t2:genero q2:Familia ;
+        t2:director q2:roger_allers ;
+        t2:reparto q2:matthew_mcconaughey ;
+        t2:reparto q2:anika_noné_rose ;
+        t2:reparto q2:bruno_campos .
+
+q2:memento wdt:P2047 '116' ;
+        t2:genero q2:Crimen;
+        t2:genero q2:Suspense ;
+        t2:director q2:christopher_nolan ;
+        t2:reparto q2:guy_pearce ;
+        t2:reparto q2:carrie_anne_moss ;
+        t2:reparto q2:joe_pantoliano .
