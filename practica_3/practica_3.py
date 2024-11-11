@@ -6,11 +6,23 @@ import base_conocimiento
 import motor_consultas
 
 @click.command()
-@click.argument("base", type=click.Path(exists=True, path_type=Path))
+# Se usa nargs=-1 para aceptar uno o varios argumentos de archivo
+@click.argument("bases", type=click.Path(exists=True, path_type=Path), nargs=-1)
 
-def main(base: Path):
+def main(bases):
 
-    bc = base_conocimiento.leer_base_conocimiento(base)
+    # Verificamos si no se ha pasado ninguna base de conocimiento
+    if not bases:
+        print("Error: No se ha especificado ninguna base de conocimiento. Indica al menos un archivo.")
+        return
+
+    # Lista que contendrá la base de conocimiento
+    bc_combinada = []
+
+    # Cargamos cada fichero de base de conocimiento y los mezclamos
+    for base in bases:
+        bc = base_conocimiento.leer_base_conocimiento(base)
+        bc_combinada.extend(bc)
 
     print("BIENVENIDO! \U0001F600")
     print("Introduce un comando:")
