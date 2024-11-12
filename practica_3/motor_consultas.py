@@ -51,12 +51,15 @@ def resolver_consulta(afirmaciones, consulta):
     return respuestas
 
 def imprimir_respuestas(respuestas, variables_select, indice_a_variable):
-    """PROVISIONAL"""
+    """Provisional: Imprime las respuestas basadas en las variables seleccionadas"""
     for respuesta in respuestas:
-        salida = ", ".join(f"{indice_a_variable[idx]}: {valor}" 
-                           for idx, valor in enumerate(respuesta) 
-                           if indice_a_variable.get(idx) in variables_select)
+        salida = ", ".join(
+            f"{variable}: {respuesta[indice_a_variable[variable]]}" 
+            for variable in variables_select
+            if variable in indice_a_variable
+        )
         print(salida)
+
 
 def procesar_consulta(bc, texto_consulta):
     """Procesa una consulta a la base de conocimiento introducida por el usuario.
@@ -73,7 +76,10 @@ def procesar_consulta(bc, texto_consulta):
     variables_usadas = {}
 
     # Mapeo de las variables a sus posiciones en las tuplas (para imprimir_respuestas)
-    indice_a_variable = {}
+    indice_a_variable ={var: None for var in variables_select}
+
+     # Lista para almacenar las respuestas que resulten válidas
+    respuestas_validas = []
 
     # Una tupla es una sentencia dentro del where que tiene 3 elementos (sujeto, predicado, objeto)
     for tupla in tuplas_where:
@@ -81,16 +87,14 @@ def procesar_consulta(bc, texto_consulta):
         # Qué elementos de la tupla son variables
         variables_tupla = tuple(elemento.startswith('?') for elemento in tupla)
 
-        # Mapear la posición de cada variable en la tupla (para imprimir_respuestas)
+       # Asocia cada variable a su posición en la tupla
         for j, elemento in enumerate(tupla):
-            if variables_tupla[j]:
-                indice_a_variable[j] = elemento
+            if variables_tupla[j] and elemento in variables_select:
+                indice_a_variable[elemento] = j
 
         # Resolvemos la sentencia
         respuestas = resolver_consulta(bc, tupla)
 
-        # Lista para almacenar las respuestas que resulten válidas
-        respuestas_validas = []
 
         # Se pone a True la primera vez que una variable aparezca en una sentencia del WHERE
         # WHERE { ?personaje t2:pertenece q2:casa_stark . } -> [True, False, False]
@@ -128,5 +132,6 @@ def procesar_consulta(bc, texto_consulta):
             # Si la respuesta es válida la añadimos a la lista    
             if valida:
                 respuestas_validas.append(respuesta)
-    
+    print(variables_usadas)
+
     imprimir_respuestas(respuestas_validas, variables_select, indice_a_variable)

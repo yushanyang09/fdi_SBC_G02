@@ -1,4 +1,5 @@
 
+import re
 def leer_base_conocimiento(base):
     """Lee el fichero de la base de conocimiento y devuelve
     una lista de tuplas con toda la información que contiene.
@@ -20,9 +21,9 @@ def leer_base_conocimiento(base):
     # Juntamos las líneas filtradas
     texto_filtrado = ' '.join(lineas)
 
-    # Dividimos el texto en secciones usando '.' como separador
+    # utilizamos expresiones regulares para separar por el '.' del final especificamente (por si hay problemas con los correos)
     # Cada sección corresponde a un sujeto
-    secciones = [seccion.strip() for seccion in texto_filtrado.split('.') if seccion.strip()]
+    secciones = [seccion.strip() for seccion in re.split(r'\s*\.\s*(?=\w+:|$)', texto_filtrado) if seccion.strip()]
 
     # Para cada sección
     for seccion in secciones:
