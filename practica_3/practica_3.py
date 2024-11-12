@@ -31,7 +31,7 @@ def main(bases):
     # Mientras la consulta no sea "exit", continúa la ejecución
     while consulta != "exit":
         if consulta.startswith("select"):
-            motor_consultas.procesar_consulta(bc, consulta)
+            motor_consultas.procesar_consulta(bc_combinada, consulta)
         
         print("Introduce un comando:")
         consulta = input()

@@ -21,7 +21,8 @@ def leer_base_conocimiento(base):
     # Juntamos las líneas filtradas
     texto_filtrado = ' '.join(lineas)
 
-    # utilizamos expresiones regulares para separar por el '.' del final especificamente (por si hay problemas con los correos)
+    # Utilizamos expresiones regulares para separar por el '.' del final especificamente (por si hay problemas con correos
+    # u otros posibles atributos)
     # Cada sección corresponde a un sujeto
     secciones = [seccion.strip() for seccion in re.split(r'\s*\.\s*(?=\w+:|$)', texto_filtrado) if seccion.strip()]
 
