@@ -58,7 +58,7 @@ q2:rob_stark t2:pertenece q2:casa_stark ;
         t2:hermano q2:arya_stark ;
         t2:hermano q2:brandon_stark ;
         t2:hermano q2:rickon_stark ;
-        t2:alias "el joven lobo" ;
+        t2:alias "el_joven_lobo" ;
         t2:edad "19" .
 
 q2:sansa_stark t2:pertenece q2:casa_stark ;
@@ -111,12 +111,12 @@ q2:rhaegar_targaryen t2:pertenece q2:casa_targaryen ;
 # CASAS
 
 q2:casa_stark t2:asentamiento q2:invernalia ;
-        t2:lema "se acerca el invierno" .
+        t2:lema "se_acerca_el_invierno" .
 
 q2:casa_lannister t2:asentamiento q2:roca_casterly ;
-        t2:lema "oye mi rugido" ;
-        t2:lema "un lannister siempre paga sus deudas" .
+        t2:lema "oye_mi_rugido" ;
+        t2:lema "un_lannister_siempre_paga_sus_deudas" .
 
-q2:casa_targaryen t2:lema "fuego y sangre" .
+q2:casa_targaryen t2:lema "fuego_y_sangre" .
 
-q2:casa_tully t2:lema "familia, deber, honor" .
+q2:casa_tully t2:lema "familia_deber_honor" .

@@ -137,4 +137,4 @@ def procesar_consulta(bc, texto_consulta):
                         variables_usadas[elemento][respuesta_valida[i]] = indice2
                         variable_nueva[i] = True
         
-        imprimir_respuestas(variables_usadas, indices_validos, variables_select)
+    imprimir_respuestas(variables_usadas, indices_validos, variables_select)
