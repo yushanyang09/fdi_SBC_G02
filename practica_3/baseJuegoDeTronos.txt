@@ -1,0 +1,122 @@
+### Base de conocimiento sobre la serie Juego de Tronos
+
+### Listado de entidades (17)
+# q2:eddard_stark
+# q2:catelyn_stark
+# q2:rob_stark
+# q2:sansa_stark
+# q2:arya_stark
+# q2:brandon_stark
+# q2:rickon_stark
+# q2:jon_nieve
+# q2:tyrion_lannister
+# q2:daenerys_targaryen
+# q2:rhaegar_targaryen
+# q2:casa_stark
+# q2:casa_lannister
+# q2:casa_targaryen
+# q2:casa_tully
+# q2:invernalia
+# q2:roca_casterly
+
+### Listado de relaciones (9)
+# t2:pertenece
+# t2:padre
+# t2:madre
+# t2:hermano
+# t2:hijo_bastardo
+# t2:alias
+# t2:edad (en la temporada 1)
+# t2:casado_con
+# t2:lema
+
+# PERSONAJES
+
+q2:eddard_stark t2:pertenece q2:casa_stark ;
+	t2:padre q2:rob_stark ;
+	t2:padre q2:sansa_stark ;
+	t2:padre q2:arya_stark ;
+	t2:padre q2:brandon_stark ;
+	t2:padre q2:rickon_stark ;
+        t2:casado_con q2:catelyn_stark ;
+        t2:alias "ned" ;
+        t2:edad "41" .
+
+q2:catelyn_stark t2:pertenece q2:casa_stark ;
+        t2:pertenece q2:casa_tully ;
+        t2:madre q2:rob_stark ;
+        t2:madre q2:sansa_stark ;
+        t2:madre q2:arya_stark ;
+        t2:madre q2:brandon_stark ;
+        t2:madre q2:rickon_stark ;
+        t2:casado_con q2:eddard_stark ;
+        t2:alias "cat" ;
+        t2:edad "40" .
+
+q2:rob_stark t2:pertenece q2:casa_stark ;
+        t2:hermano q2:sansa_stark ;
+        t2:hermano q2:arya_stark ;
+        t2:hermano q2:brandon_stark ;
+        t2:hermano q2:rickon_stark ;
+        t2:alias "el joven lobo" ;
+        t2:edad "19" .
+
+q2:sansa_stark t2:pertenece q2:casa_stark ;
+        t2:hermano q2:rob_stark ;
+        t2:hermano q2:arya_stark ;
+        t2:hermano q2:brandon_stark ;
+        t2:hermano q2:rickon_stark ;
+        t2:casado_con q2:tyrion_lannister ;
+        t2:edad "13" .
+
+q2:arya_stark t2:pertenece q2:casa_stark ;
+        t2:hermano q2:rob_stark ;
+        t2:hermano q2:sansa_stark ;
+        t2:hermano q2:brandon_stark ;
+        t2:hermano q2:rickon_stark ;
+        t2:edad "11" .
+
+q2:brandon_stark t2:pertenece q2:casa_stark ;
+        t2:hermano q2:rob_stark ;
+        t2:hermano q2:sansa_stark ;
+        t2:hermano q2:arya_stark ;
+        t2:hermano q2:rickon_stark ;
+        t2:alias "bran" ;
+        t2:edad "10" .
+
+q2:rickon_stark t2:pertenece q2:casa_stark ;
+        t2:hermano q2:rob_stark ;
+        t2:hermano q2:sansa_stark ;
+        t2:hermano q2:arya_stark ;
+        t2:hermano q2:brandon_stark ;
+        t2:edad "6" .
+
+q2:jon_nieve t2:pertenece q2:casa_stark ;
+        t2:hijo_bastardo q2:eddard_stark ;
+        t2:edad "16" .
+
+q2:tyrion_lannister t2:pertenece q2:casa_lannister ;
+        t2:casado_con q2:sansa_stark ;
+        t2:alias "gnomo" ;
+        t2:edad "32" .
+
+q2:daenerys_targaryen t2:pertenece q2:casa_targaryen ;
+        t2:alias "dany" ;
+        t2:edad "16" .
+
+q2:rhaegar_targaryen t2:pertenece q2:casa_targaryen ;
+        t2:hermano q2:daenerys_targaryen ;
+        t2:padre q2:jon_nieve .
+
+# CASAS
+
+q2:casa_stark t2:asentamiento q2:invernalia ;
+        t2:lema "se acerca el invierno" .
+
+q2:casa_lannister t2:asentamiento q2:roca_casterly ;
+        t2:lema "oye mi rugido" ;
+        t2:lema "un lannister siempre paga sus deudas" .
+
+q2:casa_targaryen t2:lema "fuego y sangre" .
+
+q2:casa_tully t2:lema "familia, deber, honor" .
