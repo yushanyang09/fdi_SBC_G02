@@ -22,6 +22,7 @@ def leer_consulta(texto_consulta):
     sentencias = [s.strip() for s in sentencias.split('.') if s.strip()]
     tuplas_where = [tuple(sentencia.split()) for sentencia in sentencias]
 
+
     return variables_select, tuplas_where
 
 def es_variable(elemento):
@@ -62,13 +63,28 @@ def imprimir_respuestas(variables_usadas, indices_validos, variables_select):
     - indices_validos (set):
     - variables_select (lista):
     """
-
     for indice in indices_validos:
         for variable in variables_select:
             #if (indice in variables_usadas[variable].values()): # creo que no hace falta
                 # Nos quedamos con los valores de las variables (las claves del diccionario) que tengan este indice como valor
                 respuestas = [clave for clave, val in variables_usadas[variable].items() if val == indice]
                 print(respuestas)
+
+def imprimir_1respuesta(variables_usadas, variables_select):
+    """Imprime los valores de las variables de las respuestas para una consulta simple.
+    
+    Parámetros:
+    - variables_usadas (dict): diccionario con los valores de las variables
+    - variables_select (lista): variables que deben ser mostradas en la salida
+    """
+
+    # Imprimir las respuestas de cada variable seleccionada
+    for variable in variables_select:
+        if variable in variables_usadas:
+            # Imprimir los valores asociados con cada variable
+            for valor in variables_usadas[variable]:
+                print(valor)
+
 
 def procesar_consulta(bc, texto_consulta):
     """Procesa una consulta a la base de conocimiento introducida por el usuario.
@@ -101,6 +117,10 @@ def procesar_consulta(bc, texto_consulta):
                         variables_usadas[elemento] = {}
                     variables_usadas[elemento][respuesta_inicial[i]] = indice
             indice += 1
+    
+    imprimir_1respuesta(variables_usadas, variables_select)
+    # Conjunto para almacenar los índices de las respuestas válidas
+    indices_validos = set()
 
     # Resolvemos las siguientes sentencias si las hay
     for tupla in tuplas_where[1:]:
@@ -117,9 +137,6 @@ def procesar_consulta(bc, texto_consulta):
                         if nueva_respuesta[i] in variables_usadas[elemento]:
                             respuestas_validas.append(nueva_respuesta)
         
-        # Conjunto para almacenar los índices de las respuestas válidas
-        indices_validos = set()
-
         # Si una variable no se ha usado antes, se pone su posición a True
         variable_nueva = [False, False, False]
 
