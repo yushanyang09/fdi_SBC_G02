@@ -22,7 +22,6 @@ def leer_consulta(texto_consulta):
     sentencias = [s.strip() for s in sentencias.split('.') if s.strip()]
     tuplas_where = [tuple(sentencia.split()) for sentencia in sentencias]
 
-
     return variables_select, tuplas_where
 
 def es_variable(elemento):
@@ -56,19 +55,35 @@ def resolver_consulta(afirmaciones, consulta):
     return respuestas
 
 def imprimir_respuestas(variables_usadas, indices_validos, variables_select):
-    """Imprime los valores de las variables de las respuestas.
+    """Imprime los valores de las variables de las respuestas en formato tabla, con las columnas alineadas según el valor más largo.
     
     Parámetros:
-    - variables_usadas (dict):
-    - indices_validos (set):
-    - variables_select (lista):
+    - variables_usadas (dict): Diccionario con las respuestas para cada variable.
+    - indices_validos (set): Conjunto con los índices válidos de las respuestas.
+    - variables_select (lista): Lista con las variables a mostrar (ejemplo: '?asignatura', '?email').
     """
+    max_widths = {}
+    
+    for var in variables_select:
+        max_widths[var] = max(len(var), max(len(str(val)) for val in variables_usadas[var].keys()))
+    
+    # Imprime los encabezados de la tabla
+    header = " | ".join(f"{var.ljust(max_widths[var])}" for var in variables_select) + " |"
+    print(header)
+    print("-" * len(header)) 
+    
+    # Imprime las respuestas para los índices válidos
     for indice in indices_validos:
+        respuestas = []
         for variable in variables_select:
-            #if (indice in variables_usadas[variable].values()): # creo que no hace falta
-                # Nos quedamos con los valores de las variables (las claves del diccionario) que tengan este indice como valor
-                respuestas = [clave for clave, val in variables_usadas[variable].items() if val == indice]
-                print(respuestas)
+            # Imprimir los valores de las variables según el índice
+            respuesta = [clave for clave, val in variables_usadas[variable].items() if val == indice]
+            # Asumimos que solo hay una respuesta por variable en cada índice
+            respuestas.append(f'"{respuesta[0]}"'.ljust(max_widths[variable]) if respuesta else "None".ljust(max_widths[variable]))
+        # Imprime las respuestas separadas por " | "
+        print(" | ".join(respuestas) + " |")
+    
+    print("-" * len(header))  
 
 def imprimir_1respuesta(variables_usadas, variables_select):
     """Imprime los valores de las variables de las respuestas para una consulta simple.
@@ -78,12 +93,26 @@ def imprimir_1respuesta(variables_usadas, variables_select):
     - variables_select (lista): variables que deben ser mostradas en la salida
     """
 
-    # Imprimir las respuestas de cada variable seleccionada
+    # Calculamos el ancho máximo de cada columna (incluyendo los encabezados)
+    max_widths = {}
+    
+    for var in variables_select:
+        max_widths[var] = max(len(var), max(len(str(val)) for val in variables_usadas[var]))
+
+    # Imprime los encabezados de la tabla
+    header = " | ".join(f"{var.ljust(max_widths[var])}" for var in variables_select) + " |"
+    print(header)
+    print("-" * len(header))  # Línea divisoria
+
+    # Imprime la respuesta de cada variable seleccionada
+    respuestas = []
     for variable in variables_select:
-        if variable in variables_usadas:
-            # Imprimir los valores asociados con cada variable
-            for valor in variables_usadas[variable]:
-                print(valor)
+        valor = list(variables_usadas[variable].keys())[0]  # Solo tomamos el primer valor
+        respuestas.append(f'"{valor}"'.ljust(max_widths[variable]))
+
+    # Imprime la fila con las respuestas
+    print(" | ".join(respuestas) + " |")
+    print("-" * len(header))  
 
 
 def procesar_consulta(bc, texto_consulta):
@@ -109,7 +138,6 @@ def procesar_consulta(bc, texto_consulta):
     # Resolvemos la primera sentencia
     tupla_inicial = tuplas_where[0]
     respuestas_iniciales = resolver_consulta(bc, tupla_inicial)
-
     for respuesta_inicial in respuestas_iniciales:
             for i, elemento in enumerate(tupla_inicial):
                 if es_variable(elemento):
@@ -117,41 +145,41 @@ def procesar_consulta(bc, texto_consulta):
                         variables_usadas[elemento] = {}
                     variables_usadas[elemento][respuesta_inicial[i]] = indice
             indice += 1
-    
-    imprimir_1respuesta(variables_usadas, variables_select)
-    # Conjunto para almacenar los índices de las respuestas válidas
-    indices_validos = set()
 
-    # Resolvemos las siguientes sentencias si las hay
-    for tupla in tuplas_where[1:]:
+    if len(tuplas_where) == 1:
+        imprimir_1respuesta(variables_usadas, variables_select)
+    else :
+        # Resolvemos las siguientes sentencias si las hay
+        for tupla in tuplas_where[1:]:
 
-        nuevas_respuestas = resolver_consulta(bc, tupla)
+            nuevas_respuestas = resolver_consulta(bc, tupla)
 
-        respuestas_validas = []
+            respuestas_validas = []
 
-        # Seleccionamos solo las respuestas válidas según las respuestas iniciales
-        for nueva_respuesta in nuevas_respuestas:
-            for i, elemento in enumerate(tupla):
-                if es_variable(elemento):
-                    if elemento in variables_usadas:
-                        if nueva_respuesta[i] in variables_usadas[elemento]:
-                            respuestas_validas.append(nueva_respuesta)
-        
-        # Si una variable no se ha usado antes, se pone su posición a True
-        variable_nueva = [False, False, False]
+            # Seleccionamos solo las respuestas válidas según las respuestas iniciales
+            for nueva_respuesta in nuevas_respuestas:
+                for i, elemento in enumerate(tupla):
+                    if es_variable(elemento):
+                        if elemento in variables_usadas:
+                            if nueva_respuesta[i] in variables_usadas[elemento]:
+                                respuestas_validas.append(nueva_respuesta)
 
-        for respuesta_valida in respuestas_validas:
-            for i, elemento in enumerate(tupla):
-                if es_variable(elemento):
-                    if elemento in variables_usadas:
-                        if variable_nueva[i] == False:
-                            indice2 = variables_usadas[elemento][respuesta_valida[i]]
-                            indices_validos.add(indice2)
+            # Conjunto para almacenar los índices de las respuestas válidas
+            indices_validos = set()
+            # Si una variable no se ha usado antes, se pone su posición a True
+            variable_nueva = [False, False, False]
+
+            for respuesta_valida in respuestas_validas:
+                for i, elemento in enumerate(tupla):
+                    if es_variable(elemento):
+                        if elemento in variables_usadas:
+                            if variable_nueva[i] == False:
+                                indice2 = variables_usadas[elemento][respuesta_valida[i]]
+                                indices_validos.add(indice2)
+                            else:
+                                variables_usadas[elemento][respuesta_valida[i]] = indice2
                         else:
+                            variables_usadas[elemento] = {}
                             variables_usadas[elemento][respuesta_valida[i]] = indice2
-                    else:
-                        variables_usadas[elemento] = {}
-                        variables_usadas[elemento][respuesta_valida[i]] = indice2
-                        variable_nueva[i] = True
-        
-    imprimir_respuestas(variables_usadas, indices_validos, variables_select)
+                            variable_nueva[i] = True
+        imprimir_respuestas(variables_usadas, indices_validos, variables_select)
