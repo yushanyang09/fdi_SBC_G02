@@ -26,7 +26,7 @@ def main(bases):
         load <archivo.txt>: añade una nueva base de conocimiento al sistema\n
         add <sujeto relacion objeto>: añade una nueva afirmación a la base de conocimiento\n
         save <ruta_archivo>: guarda la base de datos actual en la ruta especificada\n
-        draw <ruta_archivo>: guarda un grafo de la base de conocimiento en la ruta especificada\n
+        draw <ruta_archivo>: guarda un grafo de la base de conocimiento actual en la ruta especificada\n
         help: muestra la ayuda al usuario\n
         exit: termina la ejecución del programa
     """
@@ -34,8 +34,8 @@ def main(bases):
     if not bases:
         interfaz.error_bases()
         return
-
-    bc = base_conocimiento.combinar_bases(bases)
+    else:
+        bc = base_conocimiento.combinar_bases(bases)
 
     interfaz.bienvenida()
 

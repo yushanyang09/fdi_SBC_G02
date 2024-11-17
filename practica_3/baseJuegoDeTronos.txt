@@ -1,4 +1,7 @@
 ### Base de conocimiento sobre la serie Juego de Tronos
+# Contiene entidades que representan a diferentes personajes de la serie, casas y localizaciones.
+# Las entidades se relacionan principalmente mediante relaciones familiares entre los personajes.
+# También hay valores literales y elementos de Wikidata.
 
 ### Listado de entidades (17)
 # q2:eddard_stark
@@ -16,14 +19,14 @@
 # q2:casa_lannister
 # q2:casa_targaryen
 # q2:casa_tully
-# q2:invernalia
-# q2:roca_casterly
+# wd:Q20925302 (winterfell/invernalia)
+# wd:Q57739629 (roca_casterly)
 
 ### Listado de relaciones (9)
-# t2:pertenece
+# wdt:P52 (familia)
 # t2:padre
 # t2:madre
-# t2:hermano
+# wdt:P3373 (sibling/hermanos)
 # t2:hijo_bastardo
 # t2:alias
 # t2:edad (en la temporada 1)
@@ -32,7 +35,7 @@
 
 # PERSONAJES
 
-q2:eddard_stark t2:pertenece q2:casa_stark ;
+q2:eddard_stark wdt:P52 q2:casa_stark ;
 	t2:padre q2:rob_stark ;
 	t2:padre q2:sansa_stark ;
 	t2:padre q2:arya_stark ;
@@ -42,8 +45,8 @@ q2:eddard_stark t2:pertenece q2:casa_stark ;
         t2:alias "ned" ;
         t2:edad "41" .
 
-q2:catelyn_stark t2:pertenece q2:casa_stark ;
-        t2:pertenece q2:casa_tully ;
+q2:catelyn_stark wdt:P52 q2:casa_stark ;
+        wdt:P52 q2:casa_tully ;
         t2:madre q2:rob_stark ;
         t2:madre q2:sansa_stark ;
         t2:madre q2:arya_stark ;
@@ -53,67 +56,67 @@ q2:catelyn_stark t2:pertenece q2:casa_stark ;
         t2:alias "cat" ;
         t2:edad "40" .
 
-q2:rob_stark t2:pertenece q2:casa_stark ;
-        t2:hermano q2:sansa_stark ;
-        t2:hermano q2:arya_stark ;
-        t2:hermano q2:brandon_stark ;
-        t2:hermano q2:rickon_stark ;
+q2:rob_stark wdt:P52 q2:casa_stark ;
+        wdt:P3373 q2:sansa_stark ;
+        wdt:P3373 q2:arya_stark ;
+        wdt:P3373 q2:brandon_stark ;
+        wdt:P3373 q2:rickon_stark ;
         t2:alias "el_joven_lobo" ;
         t2:edad "19" .
 
-q2:sansa_stark t2:pertenece q2:casa_stark ;
-        t2:hermano q2:rob_stark ;
-        t2:hermano q2:arya_stark ;
-        t2:hermano q2:brandon_stark ;
-        t2:hermano q2:rickon_stark ;
+q2:sansa_stark wdt:P52 q2:casa_stark ;
+        wdt:P3373 q2:rob_stark ;
+        wdt:P3373 q2:arya_stark ;
+        wdt:P3373 q2:brandon_stark ;
+        wdt:P3373 q2:rickon_stark ;
         t2:casado_con q2:tyrion_lannister ;
         t2:edad "13" .
 
-q2:arya_stark t2:pertenece q2:casa_stark ;
-        t2:hermano q2:rob_stark ;
-        t2:hermano q2:sansa_stark ;
-        t2:hermano q2:brandon_stark ;
-        t2:hermano q2:rickon_stark ;
+q2:arya_stark wdt:P52 q2:casa_stark ;
+        wdt:P3373 q2:rob_stark ;
+        wdt:P3373 q2:sansa_stark ;
+        wdt:P3373 q2:brandon_stark ;
+        wdt:P3373 q2:rickon_stark ;
         t2:edad "11" .
 
-q2:brandon_stark t2:pertenece q2:casa_stark ;
-        t2:hermano q2:rob_stark ;
-        t2:hermano q2:sansa_stark ;
-        t2:hermano q2:arya_stark ;
-        t2:hermano q2:rickon_stark ;
+q2:brandon_stark wdt:P52 q2:casa_stark ;
+        wdt:P3373 q2:rob_stark ;
+        wdt:P3373 q2:sansa_stark ;
+        wdt:P3373 q2:arya_stark ;
+        wdt:P3373 q2:rickon_stark ;
         t2:alias "bran" ;
         t2:edad "10" .
 
-q2:rickon_stark t2:pertenece q2:casa_stark ;
-        t2:hermano q2:rob_stark ;
-        t2:hermano q2:sansa_stark ;
-        t2:hermano q2:arya_stark ;
-        t2:hermano q2:brandon_stark ;
+q2:rickon_stark wdt:P52 q2:casa_stark ;
+        wdt:P3373 q2:rob_stark ;
+        wdt:P3373 q2:sansa_stark ;
+        wdt:P3373 q2:arya_stark ;
+        wdt:P3373 q2:brandon_stark ;
         t2:edad "6" .
 
-q2:jon_nieve t2:pertenece q2:casa_stark ;
+q2:jon_nieve wdt:P52 q2:casa_stark ;
         t2:hijo_bastardo q2:eddard_stark ;
         t2:edad "16" .
 
-q2:tyrion_lannister t2:pertenece q2:casa_lannister ;
+q2:tyrion_lannister wdt:P52 q2:casa_lannister ;
         t2:casado_con q2:sansa_stark ;
         t2:alias "gnomo" ;
         t2:edad "32" .
 
-q2:daenerys_targaryen t2:pertenece q2:casa_targaryen ;
+q2:daenerys_targaryen wdt:P52 q2:casa_targaryen ;
         t2:alias "dany" ;
         t2:edad "16" .
 
-q2:rhaegar_targaryen t2:pertenece q2:casa_targaryen ;
-        t2:hermano q2:daenerys_targaryen ;
+q2:rhaegar_targaryen wdt:P52 q2:casa_targaryen ;
+        wdt:P3373 q2:daenerys_targaryen ;
         t2:padre q2:jon_nieve .
 
 # CASAS
 
-q2:casa_stark t2:asentamiento q2:invernalia ;
+q2:casa_stark t2:asentamiento wd:Q20925302 ;
         t2:lema "se_acerca_el_invierno" .
 
-q2:casa_lannister t2:asentamiento q2:roca_casterly ;
+q2:casa_lannister t2:asentamiento wd:Q57739629 ;
         t2:lema "oye_mi_rugido" ;
         t2:lema "un_lannister_siempre_paga_sus_deudas" .
 

@@ -11,16 +11,31 @@ def leer_consulta(texto_consulta):
     cada una representa una sentencia del WHERE
     """
 
+    if "where" not in texto_consulta:
+        raise ValueError("La consulta no contiene la cláusula WHERE.")
+    
     # Dividimos el texto de la consulta usando "where" como separador
     split_where = texto_consulta.split("where")
 
+    if split_where[1] == '':
+        raise ValueError("Cláusula WHERE vacía.")
+
     # Obtenemos las variables del select
     variables_select = [token.strip(",") for token in split_where[0].split() if token.startswith('?')]
+
+    if not variables_select:
+        raise ValueError("No se encontraron variables en la cláusula SELECT.")
 
     # Obtenemos las tuplas con las sentencias del where
     sentencias = split_where[1].split('{')[1].split('}')[0]
     sentencias = [s.strip() for s in sentencias.split('.') if s.strip()]
     tuplas_where = [tuple(sentencia.split()) for sentencia in sentencias]
+
+    if not tuplas_where:
+        raise ValueError("No se encontraron sentencias en la cláusula WHERE.")
+    for tupla in tuplas_where:
+        if len(tupla) != 3:
+            raise ValueError(f"La sentencia '{' '.join(tupla)}' no tiene exactamente 3 elementos.")
 
     return variables_select, tuplas_where
 
@@ -53,14 +68,16 @@ def resolver_consulta(afirmaciones, consulta):
             respuestas.append(afirmacion)
     
     return respuestas
+
 def imprimir_respuestas(variables_usadas, variables_select, indices_validos=None):
-    """Imprime los valores de las variables de las respuestas en formato tabla, sin calcular el ancho máximo.
+    """Imprime los valores de las variables de las respuestas en formato tabla.
     
     Parámetros:
-    - variables_usadas (dict): Diccionario con las respuestas para cada variable.
-    - variables_select (lista): Lista con las variables a mostrar (ejemplo: '?asignatura', '?email').
-    - indices_validos (set, opcional): Conjunto con los índices válidos de las respuestas. Si es None, se imprimen todas las respuestas.
+    - variables_usadas (dict): diccionario con las respuestas para cada variable
+    - variables_select (lista): lista con las variables a mostrar (ejemplo: '?asignatura', '?email')
+    - indices_validos (set, opcional): conjunto con los índices válidos de las respuestas (si es None, se imprimen todas las respuestas)
     """
+
     # Imprime los encabezados de la tabla
     header = " | ".join(variables_select) + " |"
     print(header)
@@ -90,8 +107,6 @@ def imprimir_respuestas(variables_usadas, variables_select, indices_validos=None
 
     print("-" * len(header))
 
-
-
 def procesar_consulta(bc, texto_consulta):
     """Procesa una consulta a la base de conocimiento introducida por el usuario.
     
@@ -100,17 +115,27 @@ def procesar_consulta(bc, texto_consulta):
     - texto_consulta (string): consulta introducida por el usuario
     """
 
-    # Parseamos el texto de la consulta
-    variables_select, tuplas_where = leer_consulta(texto_consulta)
+    try:
+        # Parseamos el texto de la consulta
+        variables_select, tuplas_where = leer_consulta(texto_consulta)
+    except Exception as e:
+        # Se detiene la ejecución
+        print(f"Error: {e}")
+        return
 
     # Diccionario para almacenar los valores posibles de cada variable
+    # Las claves son las variables (por ejemplo, "?profesor")
+    # El valor es otro diccionario cuyas claves son los posibles valores de esa variable 
+    # junto con su índice (por ejemplo, {"alberto":0, "antonio":1})
     variables_usadas = {}
 
     # Asignamos un índice único a cada valor de una variable
     indice = 0
+
     # Resolvemos la primera sentencia
     tupla_inicial = tuplas_where[0]
     respuestas_iniciales = resolver_consulta(bc, tupla_inicial)
+
     for respuesta_inicial in respuestas_iniciales:
         for i, elemento in enumerate(tupla_inicial):
             if es_variable(elemento):
@@ -137,8 +162,10 @@ def procesar_consulta(bc, texto_consulta):
             
             # Conjunto para almacenar los índices de las respuestas válidas
             indices_validos = set()
+
             # Si una variable no se ha usado antes, se pone su posición a True
             variable_nueva = [False, False, False]
+
             for respuesta_valida in respuestas_validas:
                 for i, elemento in enumerate(tupla):
                     if es_variable(elemento):
@@ -152,5 +179,6 @@ def procesar_consulta(bc, texto_consulta):
                             variables_usadas[elemento] = {}
                             variables_usadas[elemento][respuesta_valida[i]] = indice2
                             variable_nueva[i] = True
+                            
         # Si hay más de una consulta en WHERE, se pasa los indices_validos a la función
         imprimir_respuestas(variables_usadas, variables_select, indices_validos)
