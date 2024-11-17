@@ -101,8 +101,7 @@ def load(comando, bc):
     return bc
 
 def add(comando, bc):
-    """Añade una nueva afirmación a la base de conocimiento en tiempo de
-    ejecución.
+    """Añade una nueva afirmación a la base de conocimiento en tiempo de ejecución.
 
     Parámetros:
     - comando (string): contiene el comando con la nueva afirmación
@@ -125,6 +124,45 @@ def add(comando, bc):
         bc.extend(afirmacion_list)
 
     except ValueError as e:
-        print(f"Advertencia: {e}")
+        print(f"Error: {e}")
 
     return bc
+
+def save(comando, afirmaciones):
+    """Guarda la base de conocimiento actual en un archivo de texto.
+    
+    Parámetros:
+    - afirmaciones (list): lista de tuplas donde cada tupla es una afirmación (sujeto, predicado, objeto)
+    - archivo_salida (str): ruta del archivo de salida
+    """
+
+    # Si el formato del comando es erróneo, lanzamos una excepción
+    try:
+        archivo_salida = comando.split()
+
+        if len(archivo_salida) != 2:
+            raise ValueError("El formato del comando es erróneo. Asegurate de introducir 'save <archivo>.txt'")
+        
+        archivo_salida = archivo_salida[1]
+
+        # Diccionario para agrupar las afirmaciones por sujeto
+        afirmaciones_por_sujeto = {}
+
+        # Agrupamos las afirmaciones
+        for sujeto, predicado, objeto in afirmaciones:
+            if sujeto not in afirmaciones_por_sujeto:
+                afirmaciones_por_sujeto[sujeto] = []
+            afirmaciones_por_sujeto[sujeto].append((predicado, objeto))
+
+        # Escribimos las afirmaciones en el archivo
+        with open(archivo_salida, 'w', encoding='utf-8') as archivo:
+            for sujeto, predicados_objetos in afirmaciones_por_sujeto.items():
+                archivo.write(f"{sujeto} ")
+
+                for i, (predicado, objeto) in enumerate(predicados_objetos):
+                    separador = " ;\n\t" if i < len(predicados_objetos) - 1 else " .\n"
+                    archivo.write(f"{predicado} {objeto}{separador}")
+                archivo.write("\n")
+
+    except ValueError as e:
+        print(f"Error: {e}")

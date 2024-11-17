@@ -49,6 +49,8 @@ def main(bases):
             bc = base_conocimiento.load(consulta, bc)
         elif consulta.startswith("add"):
             bc = base_conocimiento.add(consulta, bc)
+        elif consulta.startswith("save"):
+            bc = base_conocimiento.save(consulta, bc)
         else:
             interfaz.comando_no_valido()
         
