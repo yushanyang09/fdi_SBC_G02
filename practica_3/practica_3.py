@@ -36,28 +36,30 @@ def main(bases):
     else:
         bc = base_conocimiento.combinar_bases(bases)
 
-    interfaz.bienvenida()
+        if bc:
 
-    comando = interfaz.introducir_comando()
+            interfaz.bienvenida()
 
-    # Mientras la consulta no sea "exit", continúa la ejecución
-    while comando != "exit":
-        if comando.startswith("select"):
-            motor_consultas.procesar_consulta(bc, comando)
-        elif comando == "help":
-            interfaz.imprimir_ayuda()
-        elif comando.startswith("load"):
-            bc = base_conocimiento.load(comando, bc)
-        elif comando.startswith("add"):
-            bc = base_conocimiento.add(comando, bc)
-        elif comando.startswith("save"):
-            base_conocimiento.save(comando, bc)
-        elif comando.startswith("draw"):
-            base_conocimiento.draw(comando, bc)
-        else:
-            interfaz.comando_no_valido()
-        
-        comando = interfaz.introducir_comando()
+            comando = interfaz.introducir_comando()
+
+            # Mientras la consulta no sea "exit", continúa la ejecución
+            while comando != "exit":
+                if comando.startswith("select"):
+                    motor_consultas.procesar_consulta(bc, comando)
+                elif comando == "help":
+                    interfaz.imprimir_ayuda()
+                elif comando.startswith("load"):
+                    bc = base_conocimiento.load(comando, bc)
+                elif comando.startswith("add"):
+                    bc = base_conocimiento.add(comando, bc)
+                elif comando.startswith("save"):
+                    base_conocimiento.save(comando, bc)
+                elif comando.startswith("draw"):
+                    base_conocimiento.draw(comando, bc)
+                else:
+                    interfaz.comando_no_valido()
+                
+                comando = interfaz.introducir_comando()
 
 if __name__ == "__main__":
     main()

@@ -1,3 +1,5 @@
+# Modulo para manejar la interacción del sistema con el usuario en la consola
+
 import click
 
 def error_bases():

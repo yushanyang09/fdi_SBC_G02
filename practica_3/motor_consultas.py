@@ -1,3 +1,5 @@
+# Módulo del motor de consultas. Incluye funciones para leer, resolver y mostrar los resultados de las consultas.
+
 def leer_consulta(texto_consulta):
     """Parsea el texto de la consulta.
     
@@ -78,8 +80,15 @@ def imprimir_respuestas(variables_usadas, variables_select, indices_validos=None
     - indices_validos (set, opcional): conjunto con los índices válidos de las respuestas (si es None, se imprimen todas las respuestas)
     """
 
+    # Calculamos el ancho máximo para cada columna
+    max_width = []
+    for variable in variables_select:
+        max_len = max(len(str(key)) for key in variables_usadas.get(variable, {}).keys())
+        # Nos aseguramos de que la columna no sea más pequeña que el encabezado
+        max_width.append(max(max_len, len(variable)))
+
     # Imprime los encabezados de la tabla
-    header = " | ".join(variables_select) + " |"
+    header = " | ".join(f"{var: <{max_width[i]}}" for i, var in enumerate(variables_select)) + " |"
     print(header)
     print("-" * len(header))
 
@@ -89,11 +98,10 @@ def imprimir_respuestas(variables_usadas, variables_select, indices_validos=None
         respuestas = []
         for variable in variables_select:
             respuestas.append(list(variables_usadas.get(variable, {}).keys()))
-        
         # Imprime las respuestas correspondientes de cada variable
-        for i in range(len(respuestas[0])):  # Suponemos que todas las listas tienen el mismo tamaño
-            fila = " | ".join(f'"{respuestas[j][i]}"' for j in range(len(respuestas)))
-            print(fila)
+        for i in range(len(respuestas[0])):
+            fila = " | ".join(f"{respuestas[j][i]: <{max_width[j]}}" for j in range(len(respuestas)))
+            print(fila + " |")
     else:
         # Si hay índices válidos, imprimimos solo las respuestas correspondientes a esos índices
         for indice in indices_validos:
@@ -101,11 +109,10 @@ def imprimir_respuestas(variables_usadas, variables_select, indices_validos=None
             for variable in variables_select:
                 respuesta = [clave for clave, val in variables_usadas[variable].items() if val == indice]
                 # Si la respuesta está vacía, se maneja como "None"
-                respuestas.append(f'"{respuesta[0]}"' if respuesta else "None")
+                respuestas.append(f"{respuesta[0] if respuesta else 'None': <{max_width[variables_select.index(variable)]}}")
             # Imprimimos las respuestas de las variables correspondientes al índice válido
-            print(" | ".join(respuestas))
-
-    print("-" * len(header))
+            print(" | ".join(respuestas) + " |")
+    print("")
 
 def procesar_consulta(bc, texto_consulta):
     """Procesa una consulta a la base de conocimiento introducida por el usuario.

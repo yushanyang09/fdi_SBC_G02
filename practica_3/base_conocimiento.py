@@ -1,3 +1,6 @@
+# Módulo con funciones relacionadas con el manejo de la/s base/s de conocimiento
+# También incluye las funciones que implementan algunos de los comandos de la funcionalidad opcional de la práctica
+
 import re
 from pathlib import Path
 import networkx as nx
@@ -10,12 +13,21 @@ def leer_base_conocimiento(base):
     - base (Path): ruta al fichero de la base de conocimiento
     """
 
+    # Verificar si la base es un Path válido
+    if not isinstance(base, Path):
+        raise ValueError("El parámetro 'base' debe ser una ruta de archivo válida.")
+
     # Lista que contendrá la base de conocimiento
     base_list = []
 
     # Leemos el fichero que contiene la base de conocimiento
-    with base.open("r", encoding="utf-8") as f:
-        texto = f.read()
+    try:
+        with base.open("r", encoding="utf-8") as f:
+            texto = f.read()
+    except FileNotFoundError:
+        raise FileNotFoundError(f"El archivo '{base}' no se encuentra.")
+    except IOError as e:
+        raise IOError(f"No se pudo leer el archivo '{base}': {e}")
 
     # Filtramos las líneas que no son comentarios ni líneas vacías
     lineas = [linea for linea in texto.split('\n') if not linea.startswith('#') and linea.strip()]
@@ -34,15 +46,20 @@ def leer_base_conocimiento(base):
         # Dividimos la sección en afirmaciones usando ';' como separador
         afirmaciones = [afirmacion.strip() for afirmacion in seccion.split(';') if afirmacion.strip()]
 
-        if afirmaciones:
-            # Extraemos el sujeto de la primera afirmación
-            sujeto, predicado, objeto = afirmaciones[0].split()
-            anyadir_afirmacion(base_list, (sujeto, predicado, objeto))
+        try:
+                # Extraemos el sujeto de la primera afirmación
+                sujeto, predicado, objeto = afirmaciones[0].split()
 
-            # El resto de las afirmaciones tienen el mismo sujeto
-            for afirmacion_parcial in afirmaciones[1:]:
-                predicado, objeto = afirmacion_parcial.split()
+                # Añadimos la afirmación a la base de conocimiento
                 anyadir_afirmacion(base_list, (sujeto, predicado, objeto))
+
+                # El resto de las afirmaciones tienen el mismo sujeto
+                for afirmacion_parcial in afirmaciones[1:]:
+                    predicado, objeto = afirmacion_parcial.split()
+                    anyadir_afirmacion(base_list, (sujeto, predicado, objeto))
+
+        except ValueError:
+            raise ValueError(f"Error en el formato de las afirmaciones de la base.")
     
     return base_list
 
@@ -79,7 +96,14 @@ def combinar_bases(bases):
 
     # Cargamos cada fichero de base de conocimiento y los mezclamos
     for base in bases:
-        bc = leer_base_conocimiento(base)
+        try:
+            bc = leer_base_conocimiento(base)
+        except Exception as e:
+            # Se detiene la ejecución
+            print(f"Error: {e}")
+            print("Introduce una base válida.")
+            return
+
         bc_combinada.extend(bc)
     
     return bc_combinada
@@ -96,7 +120,13 @@ def load(comando, bc):
     """
 
     archivo = comando.split()[1]
-    nueva_bc = leer_base_conocimiento(Path(archivo))
+    try:
+        nueva_bc = leer_base_conocimiento(Path(archivo))
+    except Exception as e:
+            # Se detiene la ejecución
+            print(f"Error: {e}")
+            return
+    
     bc.extend(nueva_bc)
 
     return bc
