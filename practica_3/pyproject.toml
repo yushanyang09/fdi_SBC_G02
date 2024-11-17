@@ -6,4 +6,6 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "click>=8.1.7",
+    "matplotlib>=3.9.2",
+    "networkx>=3.4.2",
 ]

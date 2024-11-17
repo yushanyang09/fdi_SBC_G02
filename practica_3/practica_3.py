@@ -15,11 +15,10 @@ def main(bases):
     las relaciones entre las distintas entidades y relaciones.
 
     Para ejecutar el programa en tu terminal introduce el siguiente comando: \n
-    uv run practica3.py <base_conocimiento_1> ... <base_conocimiento_n> <toml>
+    uv run practica3.py <base_conocimiento_1> ... <base_conocimiento_n>
 
     Argumentos:\n
         base_conocimiento: nombre del fichero que contiene una base de conocimiento a utilizar\n
-        toml: archivo de configuración con la extensión toml
 
     Comandos:\n
         select <?variable1>,...,<?variableN> where { q2:sujeto t2:relacion ?variable1 . }: hace una consulta a la base de conocimiento\n
