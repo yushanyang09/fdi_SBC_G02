@@ -1,5 +1,7 @@
 import re
 from pathlib import Path
+import networkx as nx
+import matplotlib.pyplot as plt
 
 def leer_base_conocimiento(base):
     """Lee el fichero de la base de conocimiento y devuelve
@@ -163,6 +165,54 @@ def save(comando, afirmaciones):
                     separador = " ;\n\t" if i < len(predicados_objetos) - 1 else " .\n"
                     archivo.write(f"{predicado} {objeto}{separador}")
                 archivo.write("\n")
+        print(f'El archivo se ha guardado como {archivo_salida}')
+
+    except ValueError as e:
+        print(f"Error: {e}")
+
+def draw(comando, afirmaciones):
+    """Crea y guarda un grafo en formato PNG a partir de una lista de tuplas (afirmaciones). NOTA: según el enunciado, 
+    deben poder visualizarse los resultados de la última consulta realizada. Por falta de tiempo solo mostramos el grafo
+    completo de la base de conocimiento.
+
+    Parámetros:
+    - afirmaciones (list): lista de tuplas donde cada tupla es una afirmación (sujeto, predicado, objeto)
+    - nombre_archivo (str): nombre del archivo png de salida
+    """
+
+    # Si el formato del comando es erróneo, lanzamos una excepción
+    try:
+        nombre_archivo = comando.split()
+
+        if len(nombre_archivo) != 2:
+            raise ValueError("El formato del comando es erróneo. Asegurate de introducir 'draw <archivo>.png'")
+        
+        nombre_archivo = nombre_archivo[1]
+
+        # Creamos un grafo dirigido
+        G = nx.DiGraph()
+
+        # Añadimos nodos y aristas al grafo a partir de las afirmaciones
+        for sujeto, predicado, objeto in afirmaciones:
+            G.add_node(sujeto)
+            G.add_node(objeto)
+            G.add_edge(sujeto, objeto, label=predicado)
+
+        # Dibujamos el grafo
+        pos = nx.spring_layout(G, k=0.5, iterations=50)  # Disposición de los nodos
+        plt.figure(figsize=(12, 8))
+
+        # Dibujamos los nodos y las aristas
+        nx.draw(G, pos, with_labels=True, node_color='lightblue', edge_color='gray', font_size=10, font_weight='bold')
+
+        # Dibujamos las etiquetas de las aristas
+        #edge_labels = nx.get_edge_attributes(G, 'label')
+        #nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_color='red')
+
+        # Guardamos la imagen como un archivo PNG
+        plt.savefig(nombre_archivo)
+        plt.close()
+        print(f'El grafo se ha guardado como {nombre_archivo}')
 
     except ValueError as e:
         print(f"Error: {e}")

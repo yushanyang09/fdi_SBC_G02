@@ -25,6 +25,8 @@ def main(bases):
         select <?variable1>,...,<?variableN> where { q2:sujeto t2:relacion ?variable1 . }: hace una consulta a la base de conocimiento\n
         load <archivo.txt>: añade una nueva base de conocimiento al sistema\n
         add <sujeto relacion objeto>: añade una nueva afirmación a la base de conocimiento\n
+        save <ruta_archivo>: guarda la base de datos actual en la ruta especificada\n
+        draw <ruta_archivo>: guarda un grafo de la base de conocimiento en la ruta especificada\n
         help: muestra la ayuda al usuario\n
         exit: termina la ejecución del programa
     """
@@ -37,24 +39,26 @@ def main(bases):
 
     interfaz.bienvenida()
 
-    consulta = interfaz.introducir_comando()
+    comando = interfaz.introducir_comando()
 
     # Mientras la consulta no sea "exit", continúa la ejecución
-    while consulta != "exit":
-        if consulta.startswith("select"):
-            motor_consultas.procesar_consulta(bc, consulta)
-        elif consulta == "help":
+    while comando != "exit":
+        if comando.startswith("select"):
+            motor_consultas.procesar_consulta(bc, comando)
+        elif comando == "help":
             interfaz.imprimir_ayuda()
-        elif consulta.startswith("load"):
-            bc = base_conocimiento.load(consulta, bc)
-        elif consulta.startswith("add"):
-            bc = base_conocimiento.add(consulta, bc)
-        elif consulta.startswith("save"):
-            bc = base_conocimiento.save(consulta, bc)
+        elif comando.startswith("load"):
+            bc = base_conocimiento.load(comando, bc)
+        elif comando.startswith("add"):
+            bc = base_conocimiento.add(comando, bc)
+        elif comando.startswith("save"):
+            base_conocimiento.save(comando, bc)
+        elif comando.startswith("draw"):
+            base_conocimiento.draw(comando, bc)
         else:
             interfaz.comando_no_valido()
         
-        consulta = interfaz.introducir_comando()
+        comando = interfaz.introducir_comando()
 
 if __name__ == "__main__":
     main()
