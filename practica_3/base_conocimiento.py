@@ -7,6 +7,7 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import click
 
+
 def leer_base_conocimiento(base):
     """Lee el fichero de la base de conocimiento y devuelve una lista de tuplas con toda la información que contiene.
 

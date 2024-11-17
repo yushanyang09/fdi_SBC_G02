@@ -5,7 +5,9 @@ import click
 
 def error_bases():
     """Imprime un mensaje de error si no se ha especificado ninguna base."""
-    click.echo("Error: No se ha especificado ninguna base de conocimiento. Indica al menos un archivo.")
+    click.echo(
+        "Error: No se ha especificado ninguna base de conocimiento. Indica al menos un archivo."
+    )
 
 
 def bienvenida():

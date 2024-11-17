@@ -2,6 +2,7 @@
 
 import click
 
+
 def leer_consulta(texto_consulta):
     """Parsea el texto de la consulta.
 
@@ -101,7 +102,9 @@ def imprimir_respuestas(variables_usadas, variables_select, indices_validos=None
 
         # Imprime los encabezados de la tabla
         header = (
-            " | ".join(f"{var: <{max_width[i]}}" for i, var in enumerate(variables_select))
+            " | ".join(
+                f"{var: <{max_width[i]}}" for i, var in enumerate(variables_select)
+            )
             + " |"
         )
         print(header)
@@ -116,7 +119,8 @@ def imprimir_respuestas(variables_usadas, variables_select, indices_validos=None
             # Imprime las respuestas correspondientes de cada variable
             for i in range(len(respuestas[0])):
                 fila = " | ".join(
-                    f"{respuestas[j][i]: <{max_width[j]}}" for j in range(len(respuestas))
+                    f"{respuestas[j][i]: <{max_width[j]}}"
+                    for j in range(len(respuestas))
                 )
                 print(fila + " |")
         else:
