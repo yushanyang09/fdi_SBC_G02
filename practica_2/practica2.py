@@ -137,10 +137,8 @@ class BaseConocimiento:
 
         # Recorremos las reglas
         for regla in self.reglas:
-
             # Si el consecuente coincide con la consulta
             if regla.cons == consulta:
-
                 ok = True
                 grado_v = regla.grado_verdad  # grado de verdad de la regla
                 grados_antecedentes = (
@@ -153,7 +151,6 @@ class BaseConocimiento:
 
                 # Recorremos los antecedentes de la regla
                 for antecedente in regla.antecedentes:
-
                     # Si un antecedente no está en los hechos, intentamos derivarlo recursivamente
                     devuelto = self.backward_chain(antecedente)
 
@@ -272,7 +269,6 @@ def main(base: Path, toml: Path):
 
     # Leemos el archivo que contiene la base de conocimiento
     for line in texto.split("\n"):
-
         if line.startswith("#") or not line:
             continue
 

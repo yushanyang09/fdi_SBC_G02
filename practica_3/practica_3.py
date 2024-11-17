@@ -1,17 +1,18 @@
 # Importamos librerías
 from pathlib import Path
 import click
+
 # Importamos módulos
 import base_conocimiento
 import motor_consultas
 import interfaz
 
+
 @click.command()
 # Se usa nargs=-1 para aceptar uno o varios argumentos de archivo
 @click.argument("bases", type=click.Path(exists=True, path_type=Path), nargs=-1)
-
 def main(bases):
-    """Este sistema permite cargar una o varias redes semánticas y realizar consultas sobre 
+    """Este sistema permite cargar una o varias redes semánticas y realizar consultas sobre
     las relaciones entre las distintas entidades y relaciones.
 
     Para ejecutar el programa en tu terminal introduce el siguiente comando: \n
@@ -37,7 +38,6 @@ def main(bases):
         bc = base_conocimiento.combinar_bases(bases)
 
         if bc:
-
             interfaz.bienvenida()
 
             comando = interfaz.introducir_comando()
@@ -58,8 +58,9 @@ def main(bases):
                     base_conocimiento.draw(comando, bc)
                 else:
                     interfaz.comando_no_valido()
-                
+
                 comando = interfaz.introducir_comando()
+
 
 if __name__ == "__main__":
     main()
