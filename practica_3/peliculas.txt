@@ -1,3 +1,76 @@
+### Base de conocimiento sobre un conjunto de películas
+
+### Listado de entidades (46)
+## películas
+# q2:intocable
+# q2:el_senor_de_los_anillos_las_dos_torres
+# q2:el_padrino
+# q2:el_rey_leon
+# q2:la_princesa_y_el_sapo
+# q2:memento
+
+## géneros
+# q2:Drama
+# q2:Comedia
+# q2:Aventura
+# q2:Fantasia
+# q2:Crimen
+# q2:Animación
+# q2:Familia
+# q2:Suspense
+
+## personas
+# q2:eric_toledano
+# q2:olivier_nakache
+# q2:peter_jackson
+# q2:francis_ford_coppola
+# q2:roger_allers
+# q2:rob_minkoff
+# q2:christopher_nolan
+# q2:francois_cluzet
+# q2:omar_sy
+# q2:anne_le_ny
+# q2:elijah_wood
+# q2:sean_astin
+# q2:viggo_mortensen
+# q2:marlon_brando
+# q2:al_pacino
+# q2:james_caan
+# q2:matthew_broderick
+# q2:jonathan_taylor
+# q2:james_earl_jones
+# q2:matthew_mcconaughey
+# q2:anika_noné_rose
+# q2:bruno_campos
+# q2:guy_pearce
+# q2:carrie_anne_moss
+# q2:joe_pantoliano
+# q2:eric_toledano
+# q2:nicolas_duval_adassovsky
+# q2:ludovico_einaudi
+# q2:irene_mecchi
+# q2:hans_zimmer
+# q2:aaron_ryder
+# q2:david_julyan
+
+## países
+# q2:francia
+# q2:estados_unidos
+# q2:nueva_zelanda
+
+
+### Listado de relaciones (10)
+# wdt:P2047 (duración)
+# t2:genero
+# t2:director
+# t2:reparto
+# t2:guionista
+# t2:productor
+# t2:musica_compuesta_por
+# t2:estreno
+# t2:pais
+# t2:presupuesto
+
 q2:intocable wdt:P2047 "112" ;
         t2:genero q2:Drama;
         t2:genero q2:Comedia ;  
@@ -5,7 +78,13 @@ q2:intocable wdt:P2047 "112" ;
         t2:director q2:olivier_nakache ;
         t2:reparto q2:francois_cluzet ;
         t2:reparto q2:omar_sy ;
-        t2:reparto q2:anne_le_ny .
+        t2:reparto q2:anne_le_ny ;
+        t2:guionista q2:eric_toledano ;
+        t2:productor q2:nicolas_duval_adassovsky ;
+        t2:musica_compuesta_por q2:ludovico_einaudi ;
+        t2:estreno "2011-11-02" ;
+        t2:pais q2:francia .
+
 
 q2:el_senor_de_los_anillos_las_dos_torres wdt:P2047 "179" ;
         t2:genero q2:Aventura;
@@ -13,7 +92,10 @@ q2:el_senor_de_los_anillos_las_dos_torres wdt:P2047 "179" ;
         t2:director q2:peter_jackson ;
         t2:reparto q2:elijah_wood ;
         t2:reparto q2:sean_astin ;
-        t2:reparto q2:viggo_mortensen .
+        t2:reparto q2:viggo_mortensen ;
+        t2:estreno "2002-12-18" ;
+        t2:pais q2:nueva_zelanda ;
+        t2:presupuesto "94000000" .
 
 q2:el_padrino wdt:P2047 "175" ;
         t2:genero q2:Crimen;
@@ -21,7 +103,9 @@ q2:el_padrino wdt:P2047 "175" ;
         t2:director q2:francis_ford_coppola ;
         t2:reparto q2:marlon_brando ;
         t2:reparto q2:al_pacino ;
-        t2:reparto q2:james_caan .
+        t2:reparto q2:james_caan ;
+        t2:estreno "1972-03-24" ;
+        t2:pais q2:estados_unidos .
 
 q2:el_rey_leon wdt:P2047 "89" ;
         t2:genero q2:Aventura;
@@ -31,7 +115,12 @@ q2:el_rey_leon wdt:P2047 "89" ;
         t2:director q2:rob_minkoff ;
         t2:reparto q2:matthew_broderick ;
         t2:reparto q2:jonathan_taylor ;
-        t2:reparto q2:james_earl_jones .
+        t2:reparto q2:james_earl_jones ;
+        t2:guionista q2:irene_mecchi ;
+        t2:musica_compuesta_por q2:hans_zimmer ;
+        t2:estreno "1994-06-15" ;
+        t2:pais q2:estados_unidos ;
+        t2:presupuesto "45000000" .
 
 q2:la_princesa_y_el_sapo wdt:P2047 "97" ;
         t2:genero q2:Aventura;
@@ -40,7 +129,9 @@ q2:la_princesa_y_el_sapo wdt:P2047 "97" ;
         t2:director q2:roger_allers ;
         t2:reparto q2:matthew_mcconaughey ;
         t2:reparto q2:anika_noné_rose ;
-        t2:reparto q2:bruno_campos .
+        t2:reparto q2:bruno_campos ;
+        t2:estreno "2009-11-25" ;
+        t2:pais q2:estados_unidos .
 
 q2:memento wdt:P2047 "116" ;
         t2:genero q2:Crimen;
@@ -48,4 +139,10 @@ q2:memento wdt:P2047 "116" ;
         t2:director q2:christopher_nolan ;
         t2:reparto q2:guy_pearce ;
         t2:reparto q2:carrie_anne_moss ;
-        t2:reparto q2:joe_pantoliano .
+        t2:reparto q2:joe_pantoliano ;
+        t2:guionista q2:christopher_nolan ;
+        t2:productor q2:aaron_ryder ;
+        t2:musica_compuesta_por q2:david_julyan ;
+        t2:estreno "2000-09-05" ;
+        t2:pais q2:estados_unidos ;
+        t2:presupuesto "9000000" .

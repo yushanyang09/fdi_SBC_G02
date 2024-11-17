@@ -5,7 +5,7 @@ import re
 from pathlib import Path
 import networkx as nx
 import matplotlib.pyplot as plt
-
+import click
 
 def leer_base_conocimiento(base):
     """Lee el fichero de la base de conocimiento y devuelve una lista de tuplas con toda la información que contiene.
@@ -144,6 +144,8 @@ def load(comando, bc):
 
     bc.extend(nueva_bc)
 
+    click.echo(f"Nueva base {archivo} añadida.")
+
     return bc
 
 
@@ -171,6 +173,7 @@ def add(comando, bc):
         sujeto, predicado, objeto = afirmacion[1:]
         anyadir_afirmacion(afirmacion_list, (sujeto, predicado, objeto))
         bc.extend(afirmacion_list)
+        click.echo(f"Nueva afirmación añadida.")
 
     except ValueError as e:
         print(f"Error: {e}")

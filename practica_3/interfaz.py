@@ -1,34 +1,21 @@
-# Modulo para manejar la interacción del sistema con el usuario en la consola
+# Módulo para manejar la interacción del sistema con el usuario en la consola
 
 import click
 
 
 def error_bases():
-    print(
-        "Error: No se ha especificado ninguna base de conocimiento. Indica al menos un archivo."
-    )
+    """Imprime un mensaje de error si no se ha especificado ninguna base."""
+    click.echo("Error: No se ha especificado ninguna base de conocimiento. Indica al menos un archivo.")
 
 
 def bienvenida():
-    print("BIENVENIDO! \U0001F600")
+    """Imprime el mensaje de bienvenida."""
+    click.echo("BIENVENIDO! \U0001F600")
 
 
 def introducir_comando():
-    """Permite introducir comandos en una sola línea o múltiples líneas si terminan con `}`."""
-    print("Introduce tu comando (finaliza con '}' si es multilinea):")
-
-    # Inicializamos las variables para acumular líneas
-    comando = []
-    while True:
-        linea = input()
-        comando.append(linea.strip())
-
-        # Si la última línea contiene '}', asumimos que el comando está completo
-        if linea.strip().endswith("}"):
-            break
-
-    # Unimos las líneas en un único comando
-    return " ".join(comando)
+    """Permite al usuario introducir un comando"""
+    return click.prompt("Introduce un comando")
 
 
 def imprimir_ayuda():
@@ -38,4 +25,5 @@ def imprimir_ayuda():
 
 
 def comando_no_valido():
-    print("Comando no válido \U0001F622")
+    """Imprime un mensaje de error si el comando introducido no es válido."""
+    click.echo("Comando no válido \U0001F622")
