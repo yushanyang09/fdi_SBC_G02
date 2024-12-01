@@ -1,2 +1,5 @@
-.DS_Store
+# Ignora archivos del sistema Mac 
+.DS_store
 
+# Ignora la carpeta pycache (contiene archivos de la compilación)
+__pycache__
