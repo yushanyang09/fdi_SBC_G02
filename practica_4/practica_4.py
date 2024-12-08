@@ -5,7 +5,7 @@ from ollama import chat
 
 # Importamos módulos
 import interfaz
-import modulo
+import modelo
 import base_conocimiento
 
 @click.command()
@@ -19,9 +19,15 @@ def main(bases):
     else:
         for base in bases:
             bc = base_conocimiento.leer_base_conocimiento(base)
-        modulo.iniciar_modelo(bc)
+        
+        #modelo.iniciar_modelo(bc)
+
         comando = interfaz.introducir_comando()
-        modulo.consulta(comando)
+
+        while (comando.lower() != "exit"):
+            #modelo.consulta(comando)
+            modelo.consulta_sin_historial(bc, comando)
+            comando = interfaz.introducir_comando()
 
 if __name__ == "__main__":
     main()
