@@ -58,7 +58,7 @@ def consulta_sin_historial(base_conocimiento, pregunta):
             You are an assistant that answers questions based solely on the provided knowledge base. 
             You must not provide answers that are not explicitly mentioned in the knowledge base. 
             If the information is not present in the knowledge base, respond with: "I don't know."
-            Do not infer, guess, or add any details not present in the knowledge base. "
+            Use basic logical reasoning when interpreting the knowledge base.
 
             Knowledge Base:
             {base_conocimiento}
