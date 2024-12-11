@@ -7,6 +7,7 @@ from ollama import chat
 import interfaz
 import modelo
 import base_conocimiento
+import rag
 
 @click.command()
 # Se usa nargs=-1 para aceptar uno o varios argumentos de archivo
@@ -19,14 +20,11 @@ def main(bases):
     else:
         for base in bases:
             bc = base_conocimiento.leer_base_conocimiento(base)
-        
-        #modelo.iniciar_modelo(bc)
 
         comando = interfaz.introducir_comando()
 
         while (comando.lower() != "exit"):
-            #modelo.consulta(comando)
-            modelo.consulta_sin_historial(bc, comando)
+            modelo.consulta(comando)
             comando = interfaz.introducir_comando()
 
 if __name__ == "__main__":
