@@ -20,11 +20,14 @@ def main(bases):
     else:
         for base in bases:
             bc = base_conocimiento.leer_base_conocimiento(base)
+        
+        #rag.dividir_base_conocimiento(bc)
 
         comando = interfaz.introducir_comando()
 
         while (comando.lower() != "exit"):
-            modelo.consulta(comando)
+            modelo.consulta(bc, comando)
+            #modelo.consulta_chain_of_thought(bc, comando)
             comando = interfaz.introducir_comando()
 
 if __name__ == "__main__":
