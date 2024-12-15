@@ -1,26 +1,92 @@
+## Characters
+
+### Eddard Stark
 Eddard Stark, also known as "Ned", was the head of House Stark.
 He was married to Catelyn Stark, a member of House Tully, and together they had five children: Rob Stark, Sansa Stark, Arya Stark, Bran Stark, and Rickon Stark.
 Eddard also had a supposed illegitimate son, Jon Snow, who was raised as part of the Stark family.
 Eddard Stark was 41 years old in Season 1 of Game of Thrones.
-House Stark is known for its motto, "Winter is Coming," and its ancestral seat is Winterfell.
 
+### Catelyn Stark
 Catelyn Stark, also known as "Cat," played a critical role in the political alliances of the North.
 She cared deeply for her children, though her relationship with Jon Snow was strained.
 At the start of the series, she was 40 years old. 
 
+### Rob Stark
 Rob Stark, called "The Young Wolf," was the eldest Stark child.
 Rob had strong relationships with his siblings and was especially protective of them.
-At 19, he became a key figure in the War of the Five Kings, demonstrating military brilliance.
+He was 19 years old at season 1.
+He became a key figure in the War of the Five Kings, demonstrating military brilliance.
 
+### Sansa Stark
 Sansa Stark, aged 13, began as a naive young girl with dreams of becoming queen.
 She was briefly married to Tyrion Lannister.
 
+### Arya Stark
 Arya Stark, at 11 years old, was fiercely independent and rejected traditional gender roles.
 She trained to become a deadly assassin, crossing paths with the mysterious Faceless Men.
 
-Bran Stark, nicknamed "Bran", was 10 years old when a tragic fall left him paralyzed.
+### Brandon Stark
+Brandon Stark, nicknamed "Bran", was 10 years old when a tragic fall left him paralyzed.
 Over time, he developed mystical abilities as the Three-Eyed Raven, giving him insight into the past, present, and future.
 
+### Rickon Stark
 Rickon Stark was the youngest Stark child.
 Rickon Stark was six years old at the beginning of the series.
 His role during the series was limited.
+
+### Jon Snow
+Jon Snow is the bastard son of Eddard Stark.
+He was 16 at season 1 of the series.
+
+### Tyrion Lannister
+Tyrion Lannister, often called "The Imp" or "The Halfman," was known for his wit and intelligence. 
+At 32 years old, Tyrion played a pivotal role in navigating the complex politics of Westeros. 
+Despite being married to Sansa Stark, their relationship was purely political.
+
+### Daenerys Targaryen
+Daenerys Targaryen, nicknamed "Dany," was 16 years old at season 1.
+She was one of the last surviving members of her house.
+Daenerys embarked on a journey to reclaim the Iron Throne, amassing armies and dragons along the way. 
+Her struggle highlighted themes of power, justice, and morality.
+
+### Rhaegar Targaryen
+Rhaegar Targaryen was brother of Daenerys Targaryen.
+He fathered Jon Snow with Lyanna Stark, making Jon a legitimate Targaryen heir.
+Rhaegar Targaryen was already dead by the events of Game of Thrones Season 1.
+He was killed during Robert's Rebellion, approximately 17 years before the series begins.
+His death marked a pivotal moment in the rebellion, leading to the fall of House Targaryen and Robert ascending to the Iron Throne.
+
+## Houses
+
+### House Stark
+House Stark is known for its motto, "Winter is Coming," and its ancestral seat is Winterfell.
+
+### House Lannister
+House Lannister is one of the wealthiest and most influential families in Westeros.
+House Lannister rules from Casterly Rock, a castle built atop immense gold mines that fuel their vast wealth.
+House Lannister's motto is "Hear Me Roar," reflecting their pride and dominance, though they are more commonly associated with the phrase "A Lannister Always Pays His Debts."
+
+### House Tully
+House Tully, known for the motto "Family, Duty, Honor," resides in Riverrun.
+This house is deeply tied to House Stark through Catelyn Stark.
+
+### House Targaryen
+House Targaryen has no fixed seat in the present timeline of Game of Thrones, as their ancestral home, Dragonstone, plays only a symbolic role.
+House Targaryen's motto is "Fire and Blood," symbolizing their fiery dragons and their often ruthless pursuit of power.
+
+## Other
+
+The Iron Throne is the seat of power in Westeros, located in the Red Keep in King's Landing.
+It is forged from the swords of defeated enemies, symbolizing the brutal nature of power struggles in the Seven Kingdoms.
+
+The Wall is a massive ice structure located in the North, built to protect the realms of men from dangers beyond.
+It marks the boundary between the known world and the mysterious lands inhabited by the White Walkers.
+
+The Faith of the Seven is the predominant religion in Westeros, worshipping seven deities, each representing different aspects of life.
+It is especially influential in the South, where the High Sparrow and the Sept of Baelor hold significant power.
+
+Dragons were once thought to be extinct but were revived with Daenerys Targaryen, who hatched three dragon eggs given to her as a wedding gift.
+Dragons are powerful and nearly unstoppable creatures, crucial to the Targaryen claim to the Iron Throne.
+
+The Night's Watch is a military order tasked with guarding the Wall and defending against the threats from the far North, including the mysterious creatures known as the White Walkers.
+They swear an oath of celibacy and loyalty to the realm.
