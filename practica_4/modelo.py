@@ -1,13 +1,17 @@
 # Este módulo maneja el chat con el modelo de Ollama.
-# Hay 3 usuarios:
+# Utilizamos 2 usuarios:
 # - system: el sistema (nosotras)
-# - model: el modelo de Ollama
 # - user: el usuario
 
 # Importamos las librerías
 from ollama import chat
 
 def consulta(base_conocimiento, pregunta):
+    """Realiza una consulta al modelo e imprime la respuesta. No se utiliza CoT.
+    Parámetros:
+    - base_conocimiento: texto de la base de conocimiento completa
+    - pregunta: pregunta del usuario
+    """
     
     messages = [
         {
@@ -40,23 +44,33 @@ def consulta(base_conocimiento, pregunta):
         print(f"Error al consultar el modelo de Ollama:", e)
 
 def consulta_chain_of_thought(base_conocimiento, pregunta):
+    """Realiza una consulta al modelo e imprime la respuesta. Para obtener la respuesta final se implementa
+    Chain of Thought de la siguiente forma:
+    1. Primero se permite al modelo dar una respuesta exploratoria, en la que se trata de simular el razonamiento humano.
+    2. A partir de la respuesta exploratoria, el modelo dará una respuesta final dirigida al usuario.
+    Parámetros:
+    - base_conocimiento: texto de la base de conocimiento completa
+    - pregunta: pregunta del usuario
+    """
 
-    # Primera iteración: respuesta exploratoria
+    # Respuesta exploratoria
     messages_exploratory = [
         {
             'role': 'system',
             'content': f"""
-            You are an assistant that answers questions based solely on the provided knowledge base.
-            However, for this phase, you are allowed to generate exploratory responses that may include uncertainties, 
-            logical assumptions, or even possible mistakes.
-            You can only take into account the information explicitly mentioned in the knowledge base
-            and use basic logical reasoning when interpreting it.
-            After this phase, your reasoning will be re-evaluated to refine the answer.
-
-            Knowledge Base:
+            You are an assistant that answers questions **based exclusively on the provided knowledge base**.
+            You are not allowed to use information that is not explicitly stated in the knowledge base.
+            For this phase, generate exploratory responses to simulate human reasoning.
+            Include uncertainties, logical interpretations, or potential errors.
+            Explain how each step in your reasoning is derived from the knowledge base.
+            You may not introduce any external information, guesses, or assumptions beyond what the knowledge base provides.
+            Use basic logical reasoning when interpreting the provided knowledge base.
+            
+            Answer the following question while reasoning step by step based exclusively on the knowledge base:
             {base_conocimiento}
 
             ---
+            
             """
         },
         {
@@ -71,17 +85,19 @@ def consulta_chain_of_thought(base_conocimiento, pregunta):
         exploratory_answer = response_exploratory['message']['content']
         print("\n---Exploratory Answer---\n", exploratory_answer)
 
-        # Segunda iteración: reflexión y respuesta final
+        # Reflexión y respuesta final
         messages_refined = [
             {
                 'role': 'system',
                 'content': f"""
-                You are an assistant that answers questions based solely on the provided knowledge base.
-                You have previously generated an exploratory answer. Now, you must evaluate and refine your reasoning to 
-                provide the most accurate and concise response, strictly based on the knowledge base. 
-                If the information is not present in the knowledge base, respond with: "I don't know."
+                You have generated a previous exploratory answer.
+                Now, review your previous reasoning and refine your answer.
+                Generate a clear and concise response **based exclusively on the provided knowledge base**.
+                Correct any uncertainties, logical assumptions, or mistakes from the exploratory phase.
+                Remember: You are only allowed to use information explicitly mentioned in the knowledge base.
                 Do not include irrelevant details or contradictions.
-
+                If the information is not present in the knowledge base, respond with: "I don't know."
+                
                 Knowledge Base:
                 {base_conocimiento}
 
@@ -89,6 +105,7 @@ def consulta_chain_of_thought(base_conocimiento, pregunta):
                 {exploratory_answer}
 
                 ---
+
                 """
             },
             {
@@ -100,7 +117,7 @@ def consulta_chain_of_thought(base_conocimiento, pregunta):
         # Consultamos al modelo para la respuesta refinada
         response_refined = chat('llama3.2:1b', messages=messages_refined)
         refined_answer = response_refined['message']['content']
-        print("\n---Final Answer---\n", refined_answer)
+        print("\n---Final Answer---\n", refined_answer, "\n")
 
         return refined_answer
 
