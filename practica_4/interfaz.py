@@ -33,7 +33,11 @@ def comando_no_valido():
 
 def pregunta_modelo():
     """Pregunta al usuario sobre el modelo a utilizar"""
-    mod = click.prompt("¿Qué modelo de Ollama quieres utilizar? (Por defecto: llama3.2:1b)", default="llama3.2:1b", show_default=False)
+    mod = click.prompt(
+        "¿Qué modelo de Ollama quieres utilizar? (Por defecto: llama3.2:1b)",
+        default="llama3.2:1b",
+        show_default=False,
+    )
     if mod == "llama3.2:1b":
         click.echo("Se usará el modelo llama3.2:1b")
     else:

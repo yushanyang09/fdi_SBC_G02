@@ -9,6 +9,7 @@ import modelo
 import base_conocimiento
 import rag
 
+
 @click.command()
 # Se usa nargs=-1 para aceptar uno o varios argumentos de archivo
 @click.argument("bases", type=click.Path(exists=True, path_type=Path), nargs=-1)
@@ -24,7 +25,7 @@ def main(bases):
     Comandos:\n
         help: muestra la ayuda al usuario\n
         exit: termina la ejecución del programa
-    
+
     Para hacer una pregunta al asistente el usuario podrá escribir consultas en formato libre (en inglés).
     """
 
@@ -36,32 +37,33 @@ def main(bases):
             bc = base_conocimiento.leer_base_conocimiento(base)
 
         interfaz.bienvenida()
-        
+
         mod = interfaz.pregunta_modelo()
 
         cot = interfaz.pregunta_chain_of_thought()
 
         # RAG comentado porque no funciona bien pero sí está implementado (ver rag.py)
-        #rag_mapping = rag.dividir_base_conocimiento_2(bc, mod)
+        # rag_mapping = rag.dividir_base_conocimiento_2(bc, mod)
 
         comando = interfaz.introducir_comando()
 
         # Mientras la consulta no sea "exit", continúa la ejecución
-        while (comando.lower() != "exit"):
+        while comando.lower() != "exit":
 
             if comando == "help":
                 interfaz.imprimir_ayuda()
-            #elif comando == "save":
-                #rag.guardar_mapeo(rag_mapping)
+            # elif comando == "save":
+            # rag.guardar_mapeo(rag_mapping)
             else:
                 # Si se aplicara RAG habría que pasarle 'extracted_information' en lugar de 'bc' a las funciones a continuación
-                #extracted_information = rag.rag_consulta(comando, rag_mapping, mod)
+                # extracted_information = rag.rag_consulta(comando, rag_mapping, mod)
                 if cot == "y":
                     modelo.consulta_chain_of_thought(bc, comando, mod)
                 else:
                     modelo.consulta(bc, comando, mod)
 
             comando = interfaz.introducir_comando()
+
 
 if __name__ == "__main__":
     main()

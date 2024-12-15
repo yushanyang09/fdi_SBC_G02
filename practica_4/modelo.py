@@ -6,6 +6,7 @@
 # Importamos las librerías
 from ollama import chat
 
+
 def consulta(base_conocimiento, pregunta, modelo):
     """Realiza una consulta al modelo e imprime la respuesta. No se utiliza CoT.
     Parámetros:
@@ -13,11 +14,11 @@ def consulta(base_conocimiento, pregunta, modelo):
     - pregunta: pregunta del usuario
     - modelo: modelo de Ollama a utilizar
     """
-    
+
     messages = [
         {
-            'role': 'system',
-            'content': f"""
+            "role": "system",
+            "content": f"""
             You are an assistant that answers questions based solely on the provided knowledge base. 
             You must not provide answers that are not explicitly mentioned in the knowledge base.
             Do not include information in the answers that cannot be inferred from the knowledge base.
@@ -28,21 +29,22 @@ def consulta(base_conocimiento, pregunta, modelo):
             {base_conocimiento}
 
             ---
-            """
+            """,
         },
         {
-            'role': 'user',
-            'content': pregunta,
-        }
+            "role": "user",
+            "content": pregunta,
+        },
     ]
 
     try:
         # Consultamos al modelo
         response = chat(modelo, messages=messages)
         # Imprimimos la respuesta
-        print(response['message']['content'])
+        print(response["message"]["content"])
     except Exception as e:
         print(f"Error al consultar el modelo de Ollama:", e)
+
 
 def consulta_chain_of_thought(base_conocimiento, pregunta, modelo):
     """Realiza una consulta al modelo e imprime la respuesta. Para obtener la respuesta final se implementa
@@ -58,8 +60,8 @@ def consulta_chain_of_thought(base_conocimiento, pregunta, modelo):
     # Respuesta exploratoria
     messages_exploratory = [
         {
-            'role': 'system',
-            'content': f"""
+            "role": "system",
+            "content": f"""
             You are an assistant that answers questions **based exclusively on the provided knowledge base**.
             You are not allowed to use information that is not explicitly stated in the knowledge base.
             For this phase, generate exploratory responses to simulate human reasoning.
@@ -73,25 +75,25 @@ def consulta_chain_of_thought(base_conocimiento, pregunta, modelo):
 
             ---
             
-            """
+            """,
         },
         {
-            'role': 'user',
-            'content': pregunta,
-        }
+            "role": "user",
+            "content": pregunta,
+        },
     ]
 
     try:
         # Consultamos al modelo para la respuesta exploratoria
         response_exploratory = chat(modelo, messages=messages_exploratory)
-        exploratory_answer = response_exploratory['message']['content']
+        exploratory_answer = response_exploratory["message"]["content"]
         print("\n---Exploratory Answer---\n", exploratory_answer)
 
         # Reflexión y respuesta final
         messages_refined = [
             {
-                'role': 'system',
-                'content': f"""
+                "role": "system",
+                "content": f"""
                 You have generated a previous exploratory answer.
                 Now, review your previous reasoning and refine your answer.
                 Generate a clear and concise response **based exclusively on the provided knowledge base**.
@@ -108,17 +110,17 @@ def consulta_chain_of_thought(base_conocimiento, pregunta, modelo):
 
                 ---
 
-                """
+                """,
             },
             {
-                'role': 'user',
-                'content': pregunta,
-            }
+                "role": "user",
+                "content": pregunta,
+            },
         ]
 
         # Consultamos al modelo para la respuesta refinada
         response_refined = chat(modelo, messages=messages_refined)
-        refined_answer = response_refined['message']['content']
+        refined_answer = response_refined["message"]["content"]
         print("\n---Final Answer---\n", refined_answer, "\n")
 
         return refined_answer

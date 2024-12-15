@@ -1,5 +1,6 @@
 from pathlib import Path
 
+
 def leer_base_conocimiento(base):
     """Lee el fichero de la base de conocimiento.
 
@@ -22,5 +23,5 @@ def leer_base_conocimiento(base):
         raise FileNotFoundError(f"El archivo '{base}' no se encuentra.")
     except IOError as e:
         raise IOError(f"No se pudo leer el archivo '{base}': {e}")
-    
+
     return texto
