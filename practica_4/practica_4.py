@@ -22,6 +22,7 @@ def main(bases):
             bc = base_conocimiento.leer_base_conocimiento(base)
         
         #rag.dividir_base_conocimiento(bc)
+        rag.dividir_base_conocimiento_2(bc)
 
         comando = interfaz.introducir_comando()
 

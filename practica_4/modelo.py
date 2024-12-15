@@ -14,7 +14,8 @@ def consulta(base_conocimiento, pregunta):
             'role': 'system',
             'content': f"""
             You are an assistant that answers questions based solely on the provided knowledge base. 
-            You must not provide answers that are not explicitly mentioned in the knowledge base. 
+            You must not provide answers that are not explicitly mentioned in the knowledge base.
+            Do not include information in the answers that cannot be inferred from the knowledge base.
             If the information is not present in the knowledge base, respond with: "I don't know."
             Use basic logical reasoning when interpreting the knowledge base.
 
