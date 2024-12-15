@@ -1,8 +1,14 @@
+# Este módulo incluye la implementación para el RAG
+# Las funciones para RAG están comentadas en el main porque no funciona correctamente.
+
 # Importamos las librerías
 from ollama import chat
 
+CATEGORIES = ["characters", "houses", "other information not related to characters or houses"]
+
 def dividir_base_conocimiento_1(base_conocimiento):
-    """NO FUNCIONA"""
+    """Intento de aplicar RAG para dividir la base de conocimiento según los diferentes
+    personajes y casas de Juego de Tronos."""
     
     messages = [
         {
@@ -45,7 +51,7 @@ def dividir_base_conocimiento_1(base_conocimiento):
     except Exception as e:
         print(f"Error al consultar el modelo de Ollama:", e)
 
-def dividir_base_conocimiento_2(base_conocimiento):
+def dividir_base_conocimiento_2(base_conocimiento, modelo):
     """Aplica RAG para dividir la base de conocimiento en 3 categorías:
     - personajes
     - casas
@@ -53,13 +59,11 @@ def dividir_base_conocimiento_2(base_conocimiento):
     Crea un diccionario a partir de la respuesta del modelo.
     """
 
-    dictionary = {"characters": "",
+    mapping = {"characters": "",
                   "houses": "",
                   "other information not related to characters or houses": ""}
-    
-    categories = ["characters", "houses", "other information not related to characters or houses"]
 
-    for category in categories:
+    for category in CATEGORIES:
         messages = [
             {
                 'role': 'system',
@@ -78,12 +82,89 @@ def dividir_base_conocimiento_2(base_conocimiento):
 
         try:
             # Consultamos al modelo
-            response = chat('llama3.2:1b', messages=messages)
+            response = chat(modelo, messages=messages)
             response_text = response['message']['content']
             # Imprimimos la respuesta
             print(f"\n---{category}---\n")
             print(response_text)
             # Añadimos la respuesta al diccionario
-            dictionary[category] = response_text
+            mapping[category] = response_text
+            return mapping
         except Exception as e:
             print(f"Error al consultar el modelo de Ollama:", e)
+        
+def rag_consulta(consulta, mapping, modelo):
+    """
+    Clasifica una consulta del usuario en una o varias categorías, y extrae la información relevante
+    del diccionario mapping basado en las categorías seleccionadas.
+
+    Parámetros:
+    - consulta: la pregunta del usuario.
+    - mapping: un diccionario con las categorías como claves y la información correspondiente como valores.
+    - modelo: el modelo de lenguaje a utilizar.
+
+    Devuelve:
+    - Un texto que combina la información extraída de las categorías seleccionadas.
+    """
+
+    messages = [
+        {
+            'role': 'system',
+            'content': f"""
+            You are an assistant trained to classify user queries into predefined categories.
+            Your task is to determine which of the following categories are relevant to the given user query:
+            1. characters
+            2. houses
+            3. other information not related to characters or houses
+
+            You may select one or more categories, but you must choose only the relevant ones.
+            If you are unsure or the query is ambiguous, select all three categories.
+
+            Provide your response as a comma-separated list of categories (e.g., "characters, houses").
+            Do not include any explanation or additional text.
+            """
+        },
+    ]
+
+    try:
+        # Consultamos al modelo
+        response = chat(modelo, messages=messages)
+        response_text = response['message']['content']
+
+        # Imprimimos la respuesta
+        print(response_text)
+
+        # Procesamos las categorías seleccionadas por el modelo
+        selected_categories = [cat.strip() for cat in response_text.split(',') if cat.strip() in CATEGORIES]
+
+        # Si no se selecciona ninguna categoría válida, seleccionamos todas
+        if not selected_categories:
+            selected_categories = CATEGORIES
+
+        # Extraemos la información de las categorías seleccionadas
+        extracted_information = "\n".join([mapping[cat] for cat in selected_categories])
+        return extracted_information
+
+    except Exception as e:
+        print(f"Error al consultar el modelo de Ollama:", e)
+
+def guardar_mapeo(mapping):
+    """
+    Guarda el contenido de un diccionario mapping en tres archivos de texto distintos.
+    Cada archivo corresponde a una categoría o clave del diccionario.
+
+    Parámetro:
+    - mapping: diccionario con las claves como categorías y los valores como contenido.
+    """
+    try:
+        # Iteramos sobre las claves y valores del diccionario
+        for category, content in mapping.items():
+            # Creamos un nombre de archivo basado en la categoría
+            filename = f"{category.replace(' ', '_').lower()}.txt"
+            # Guardamos el contenido en el archivo correspondiente
+            with open(filename, 'w', encoding='utf-8') as file:
+                file.write(content)
+        print("El mapeo se ha guardado correctamente en archivos de texto.")
+    except Exception as e:
+        print(f"Error al guardar el mapeo: {e}")
+

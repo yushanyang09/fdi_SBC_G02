@@ -22,7 +22,9 @@ La base de conocimiento que hemos construído esta basada en la que usamos para 
 
 Para aplicar RAG en primer lugar intentamos hacerlo de manera que el modelo seleccionara la información correspondiente a cada personaje y casa. Intentamos que, si por ejemplo una frase se refería a dos personajes, esta estuviera presente en la información de ambos personajes. El prompt utilizado se encuentra en la función <code>dividir_base_conocimiento_1</code> del módulo <code>rag.py</code>.
 
-Como el enfoque anterior no parecía funcionar hicimos otra función <code>dividir_base_conocimiento_2</code> que indica al modelo que divida la inforamción en 3 categorías: personajes, casas y otro.
+Como el enfoque anterior no parecía funcionar hicimos otra función <code>dividir_base_conocimiento_2</code> que indica al modelo que divida la inforamción en 3 categorías: personajes, casas y otro. Este enfoque, al ser más sencillo, parece funcionar mejor.
+
+Aún así las funciones para RAG están comentadas en el main porque no funciona correctamente.
 
 ### Chain of Thought
 

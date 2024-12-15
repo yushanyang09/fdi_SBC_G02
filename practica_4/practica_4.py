@@ -37,12 +37,12 @@ def main(bases):
 
         interfaz.bienvenida()
         
-        #rag.dividir_base_conocimiento(bc)
-        #rag.dividir_base_conocimiento_2(bc)
-
         mod = interfaz.pregunta_modelo()
 
         cot = interfaz.pregunta_chain_of_thought()
+
+        # RAG comentado porque no funciona bien pero sí está implementado (ver rag.py)
+        #rag_mapping = rag.dividir_base_conocimiento_2(bc, mod)
 
         comando = interfaz.introducir_comando()
 
@@ -50,8 +50,12 @@ def main(bases):
         while (comando.lower() != "exit"):
 
             if comando == "help":
-                    interfaz.imprimir_ayuda()
+                interfaz.imprimir_ayuda()
+            #elif comando == "save":
+                #rag.guardar_mapeo(rag_mapping)
             else:
+                # Si se aplicara RAG habría que pasarle 'extracted_information' en lugar de 'bc' a las funciones a continuación
+                #extracted_information = rag.rag_consulta(comando, rag_mapping, mod)
                 if cot == "y":
                     modelo.consulta_chain_of_thought(bc, comando, mod)
                 else:
