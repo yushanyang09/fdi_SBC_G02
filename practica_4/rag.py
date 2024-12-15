@@ -1,7 +1,7 @@
 # Importamos las librerías
 from ollama import chat
 
-def dividir_base_conocimiento(base_conocimiento):
+def dividir_base_conocimiento_1(base_conocimiento):
     """NO FUNCIONA"""
     
     messages = [
@@ -45,9 +45,13 @@ def dividir_base_conocimiento(base_conocimiento):
     except Exception as e:
         print(f"Error al consultar el modelo de Ollama:", e)
 
-
-
 def dividir_base_conocimiento_2(base_conocimiento):
+    """Aplica RAG para dividir la base de conocimiento en 3 categorías:
+    - personajes
+    - casas
+    - otro
+    Crea un diccionario a partir de la respuesta del modelo.
+    """
 
     dictionary = {"characters": "",
                   "houses": "",

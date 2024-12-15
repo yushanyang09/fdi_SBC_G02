@@ -6,11 +6,12 @@
 # Importamos las librerías
 from ollama import chat
 
-def consulta(base_conocimiento, pregunta):
+def consulta(base_conocimiento, pregunta, modelo):
     """Realiza una consulta al modelo e imprime la respuesta. No se utiliza CoT.
     Parámetros:
     - base_conocimiento: texto de la base de conocimiento completa
     - pregunta: pregunta del usuario
+    - modelo: modelo de Ollama a utilizar
     """
     
     messages = [
@@ -37,13 +38,13 @@ def consulta(base_conocimiento, pregunta):
 
     try:
         # Consultamos al modelo
-        response = chat('llama3.2:1b', messages=messages)
+        response = chat(modelo, messages=messages)
         # Imprimimos la respuesta
         print(response['message']['content'])
     except Exception as e:
         print(f"Error al consultar el modelo de Ollama:", e)
 
-def consulta_chain_of_thought(base_conocimiento, pregunta):
+def consulta_chain_of_thought(base_conocimiento, pregunta, modelo):
     """Realiza una consulta al modelo e imprime la respuesta. Para obtener la respuesta final se implementa
     Chain of Thought de la siguiente forma:
     1. Primero se permite al modelo dar una respuesta exploratoria, en la que se trata de simular el razonamiento humano.
@@ -51,6 +52,7 @@ def consulta_chain_of_thought(base_conocimiento, pregunta):
     Parámetros:
     - base_conocimiento: texto de la base de conocimiento completa
     - pregunta: pregunta del usuario
+    - modelo: modelo de Ollama a utilizar
     """
 
     # Respuesta exploratoria
@@ -81,7 +83,7 @@ def consulta_chain_of_thought(base_conocimiento, pregunta):
 
     try:
         # Consultamos al modelo para la respuesta exploratoria
-        response_exploratory = chat('llama3.2:1b', messages=messages_exploratory)
+        response_exploratory = chat(modelo, messages=messages_exploratory)
         exploratory_answer = response_exploratory['message']['content']
         print("\n---Exploratory Answer---\n", exploratory_answer)
 
@@ -115,7 +117,7 @@ def consulta_chain_of_thought(base_conocimiento, pregunta):
         ]
 
         # Consultamos al modelo para la respuesta refinada
-        response_refined = chat('llama3.2:1b', messages=messages_refined)
+        response_refined = chat(modelo, messages=messages_refined)
         refined_answer = response_refined['message']['content']
         print("\n---Final Answer---\n", refined_answer, "\n")
 
