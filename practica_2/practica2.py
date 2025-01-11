@@ -78,7 +78,7 @@ def main(base: Path, toml: Path):
                 else:
                     p = "intermedio"
                 print(f"Si, {p} ({devuelto})")
-                bc.imprimir_derivacion()
+                bc.imprimir_derivacion(consulta.strip("?"), devuelto)
         else:
             interfaz.comando_no_valido()
 

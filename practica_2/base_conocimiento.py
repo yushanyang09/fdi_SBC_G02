@@ -50,15 +50,31 @@ class BaseConocimiento:
         for hecho in self.hechos:
             print(hecho + " [" + str(self.hechos[hecho]) + "]")
 
-    def imprimir_derivacion(self):
+    def imprimir_derivacion(self, consulta, grado_final):
         """Imprime las reglas seguidas en la derivación de una consulta"""
-        print("\nDerivación:")
-        for x in self.seguimiento:
-            regla = x["cons"]
-            print(f"Regla aplicada: {', '.join(regla.antecedentes)} -> {regla.cons}")
-            print("Antecedentes aplicados y sus grados:")
-            for antecedente, grado in x["antecedentes_aplicados"]:
-                print(f"  {antecedente}: {grado}")
+
+        print("\nÁrbol de derivación:")
+        print(f"{consulta} ({grado_final})")
+        self.imprimir_nodo(consulta)
+        print()
+    
+    def imprimir_nodo(self, consulta, nivel=0, visitados=None):
+        """Imprime el árbol de derivación recursivamente."""
+        # Guardamos los nodos ya visitados para que no se repitan en la salida
+        if visitados is None:
+            visitados = set()
+        # Espaciado inicial para diferenciar los niveles del árbol
+        indentacion = " " * nivel
+        # Para cada elemento de la variable seguimiento
+        for entrada in self.seguimiento:
+            if entrada["regla"].cons == consulta and entrada["regla"] not in visitados:
+                visitados.add(entrada["regla"])
+                regla = entrada["regla"]
+                print(f"{indentacion}|--Regla: {regla.cons} :- {' AND '.join(regla.antecedentes)} [{regla.grado_verdad}] ({entrada['resultado_regla']:.1f})")
+                # Para cada antecedente de la regla
+                for antecedente in entrada["antecedentes_aplicados"]:
+                    print(f"{indentacion} |--{antecedente['antecedente']} ({antecedente['grado']:.1f})")
+                    self.imprimir_nodo(antecedente["antecedente"], nivel + 4, visitados)
 
     def AND_(self, grados):
         """Devuelve el resultado de un AND en lógica difusa (valor mínimo)
@@ -99,16 +115,17 @@ class BaseConocimiento:
 
         # Recorremos las reglas
         for regla in self.reglas:
+            
             # Si el consecuente coincide con la consulta
             if regla.cons == consulta:
                 ok = True
                 grado_v = regla.grado_verdad  # grado de verdad de la regla
-                grados_antecedentes = (
-                    []
-                )  # almacena los grados de los antecedentes válidos
+                grados_antecedentes = [] # almacena los grados de los antecedentes válidos
+
                 regla_aplicada = {
-                    "cons": regla,
+                    "regla": regla,
                     "antecedentes_aplicados": [],
+                    "resultado_regla": None
                 }  # para mostrar que reglas hemos aplicado
 
                 # Recorremos los antecedentes de la regla
@@ -121,20 +138,25 @@ class BaseConocimiento:
                         ok = False
                     # Si el antecedente es un hecho, almacenamos su grado
                     else:
+                        # Guardamos el antecedente aplicado
                         grados_antecedentes.append(devuelto)
                         regla_aplicada["antecedentes_aplicados"].append(
-                            (antecedente, devuelto)
-                        )  # Guardamos el antecedente aplicado
+                            {"antecedente": antecedente, "grado": devuelto}
+                        )  
 
                 # Si todos los antecedentes se cumplen, la consulta también se cumple
                 if ok:
-                    grados_reglas.append(
-                        self.AND_([grado_v, self.AND_(grados_antecedentes)])
-                    )
+                    resultado_regla = self.AND_([grado_v, self.AND_(grados_antecedentes)])
+                    grados_reglas.append(resultado_regla)
+                    regla_aplicada["resultado_regla"] = resultado_regla
                     self.seguimiento.append(regla_aplicada)
 
         if len(grados_reglas) != 0:
-            return self.OR_(grados_reglas)
+            resultado_final = self.OR_(grados_reglas)
+            # self.seguimiento.append(
+            #     {"consulta": consulta, "resultado_final": resultado_final}
+            # )  # Guardamos el resultado para la consulta actual
+            return resultado_final
         else:
             return -1
 
